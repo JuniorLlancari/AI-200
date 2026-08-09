@@ -1,0 +1,221 @@
+{
+  "Certification": "Develop AI cloud solutions on Azure",
+  "Link": "https://learn.microsoft.com/en-us/training/courses/ai-200t00",
+  "Modules": [
+    {
+      "Order": 1,
+      "Tittle": "Implement container application hosting on Azure",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Store and manage containers in Azure Container Registry",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/1-introduction?pivots=text"
+            },
+            {
+              "Name": "Registries, repositories, and artifacts",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/2-image-storage?pivots=text"
+            },
+            {
+              "Name": "Build and run images with ACR Tasks",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/3-build-run-acr-tasks?pivots=text"
+            },
+            {
+              "Name": "Tag and version images",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/4-tag-version-images?pivots=text"
+            },
+            {
+              "Name": "Exercise - Build and manage a container image with ACR Tasks",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/5-exercise-build-manage-acr-tasks"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/6-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/store-manage-containers-azure-container-registry/7-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Deploy containers to Azure App Service",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/1-introduction"
+            },
+            {
+              "Name": "Deploy containers to Azure App Service",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/2-deploy-containers"
+            },
+            {
+              "Name": "Configure container runtime behavior",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/3-configure-runtime"
+            },
+            {
+              "Name": "Configure application settings",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/4-configure-settings"
+            },
+            {
+              "Name": "Observe and troubleshoot containerized apps",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/5-observe-troubleshoot"
+            },
+            {
+              "Name": "Exercise - Deploy a container to Azure App Service",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/6-exercise"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/7-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-app-service/8-summary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 2,
+      "Tittle": "Deploy and manage apps on Azure Container Apps",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Deploy containers to Azure Container Apps",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/1-introduction"
+            },
+            {
+              "Name": "Explore Container Apps environments",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/2-container-apps-environments"
+            },
+            {
+              "Name": "Deploy a container app using the Azure CLI and YAML",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/3-deploy-container-app"
+            },
+            {
+              "Name": "Configure runtime settings with environment variables and secrets",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/4-configure-runtime"
+            },
+            {
+              "Name": "Configure image pull authentication for private registries",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/5-connect-to-registries"
+            },
+            {
+              "Name": "Verify deployments with logs and status",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/6-verify-deployment"
+            },
+            {
+              "Name": "Exercise - Deploy a containerized backend API to Container Apps",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/7-exercise-deploy-backend-api"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/8-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-containers-azure-container-apps/9-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Manage containers in Azure Container Apps",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/1-introduction"
+            },
+            {
+              "Name": "Update images and manage revisions safely",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/2-update-images-manage-revisions"
+            },
+            {
+              "Name": "Manage the container app lifecycle",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/3-app-lifecycle-management"
+            },
+            {
+              "Name": "Monitor logs and troubleshoot issues",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/4-monitor-logs-troubleshoot"
+            },
+            {
+              "Name": "Configure health probes and troubleshoot failures",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/5-health-probes"
+            },
+            {
+              "Name": "Optimize container resources and scaling",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/6-optimize-container-settings"
+            },
+            {
+              "Name": "Exercise - Diagnose and fix a failing deployment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/7-exercise-diagnose-fix-failing-deployment"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/8-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-containers-azure-container-apps/9-summary"
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Name": "Scale containers in Azure Container Apps",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/1-introduction"
+            },
+            {
+              "Name": "Configure scale rules",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/2-configure-scale-rules"
+            },
+            {
+              "Name": "Implement event-driven scaling with KEDA",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/3-event-driven-scaling-keda"
+            },
+            {
+              "Name": "Apply KEDA scalers for custom workloads",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/4-keda-scalers-custom-workloads"
+            },
+            {
+              "Name": "Select compute resources for performance and cost",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/5-compute-resources-performance-cost"
+            },
+            {
+              "Name": "Choose and apply revision modes",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/6-revision-modes-traffic-management"
+            },
+            {
+              "Name": "Exercise - Configure autoscaling using KEDA triggers",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/7-exercise-configure-autoscaling-keda"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/8-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/scale-containers-azure-container-apps/9-summary"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

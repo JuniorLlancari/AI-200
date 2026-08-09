@@ -1,0 +1,22 @@
+# Módulos en curso / aún no practicados. Se sacan de aquí (o se agregan sus
+# excepciones) a medida que se completan y quedan listos para subir.
+/Modulo02/
+
+# --- Artefactos generados por las apps de ejemplo (Python + .NET) dentro de cada dotnet/ y app.py ---
+
+# Python (Flask)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# .NET (dotnet/*.csproj)
+bin/
+obj/
+*.user
+
+# Salida local de builds Docker sueltas, si alguna vez se generan aquí
+*.log
