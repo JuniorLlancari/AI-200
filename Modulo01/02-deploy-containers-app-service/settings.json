@@ -1,0 +1,12 @@
+[
+  {
+    "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+    "slotSetting": false,
+    "value": "false"
+  },
+  {
+    "name": "DOCKER_ENABLE_CI",
+    "slotSetting": false,
+    "value": "true"
+  }
+]
