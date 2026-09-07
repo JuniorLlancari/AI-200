@@ -53,6 +53,11 @@
   }
   .submodule-header h2 { margin: 0; font-size: 1.35rem; }
   .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+  .source-link {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+    color: var(--azure); text-decoration: none; font-size: 0.78rem; font-weight: 600;
+  }
+  .source-link:hover { text-decoration: underline; }
 
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
   .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
@@ -145,6 +150,7 @@
       <div>
         <h2>Instrument an app with OpenTelemetry</h2>
         <p class="desc">Estándar abierto para capturar qué hizo un request en cada servicio por el que pasó.</p>
+        <a class="source-link" href="https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/" target="_blank" rel="noopener">Ver módulo en Microsoft Learn ↗</a>
       </div>
     </div>
 
@@ -211,6 +217,7 @@ with tracer.start_as_current_span("GenerateEmbedding") as span:
       <div>
         <h2>Analyze app telemetry with logs and metrics</h2>
         <p class="desc">De la telemetría cruda a encontrar la causa raíz: KQL, vistas de Application Insights, dashboards y alertas.</p>
+        <a class="source-link" href="https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/" target="_blank" rel="noopener">Ver módulo en Microsoft Learn ↗</a>
       </div>
     </div>
 

@@ -53,6 +53,11 @@
   }
   .submodule-header h2 { margin: 0; font-size: 1.35rem; }
   .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+  .source-link {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+    color: var(--azure); text-decoration: none; font-size: 0.78rem; font-weight: 600;
+  }
+  .source-link:hover { text-decoration: underline; }
 
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
   .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
@@ -137,6 +142,7 @@
       <div>
         <h2>Manage application secrets with Azure Key Vault</h2>
         <p class="desc">Almacén centralizado con auditoría, rotación y cifrado — para todo lo que da acceso a un recurso.</p>
+        <a class="source-link" href="https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/" target="_blank" rel="noopener">Ver módulo en Microsoft Learn ↗</a>
       </div>
     </div>
 
@@ -204,6 +210,7 @@ secret = client.get_secret("openai-api-key")</span>
       <div>
         <h2>Manage application settings with Azure App Configuration</h2>
         <p class="desc">Configuración operativa centralizada, con entornos, feature flags, y un puente transparente a Key Vault.</p>
+        <a class="source-link" href="https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/" target="_blank" rel="noopener">Ver módulo en Microsoft Learn ↗</a>
       </div>
     </div>
 

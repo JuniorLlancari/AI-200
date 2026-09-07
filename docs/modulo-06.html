@@ -53,6 +53,11 @@
   }
   .submodule-header h2 { margin: 0; font-size: 1.35rem; }
   .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+  .source-link {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+    color: var(--azure); text-decoration: none; font-size: 0.78rem; font-weight: 600;
+  }
+  .source-link:hover { text-decoration: underline; }
 
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
   .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
@@ -138,6 +143,7 @@
       <div>
         <h2>Implement data operations in Azure Managed Redis</h2>
         <p class="desc">Redis como cache: patrones de uso, tipos de dato, expiración e invalidación.</p>
+        <a class="source-link" href="https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/" target="_blank" rel="noopener">Ver módulo en Microsoft Learn ↗</a>
       </div>
     </div>
 
@@ -197,6 +203,7 @@ r.expire('user:1002:preferences', 3600)      # TTL sobre una key existente</span
       <div>
         <h2>Implement event messaging with Azure Managed Redis</h2>
         <p class="desc">Pub/Sub para difundir eventos, Streams para colas de trabajo confiables — no son intercambiables.</p>
+        <a class="source-link" href="https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/" target="_blank" rel="noopener">Ver módulo en Microsoft Learn ↗</a>
       </div>
     </div>
 
@@ -241,6 +248,7 @@ redis.xack('ai:inference:queue', 'workers', task_id)</span>
       <div>
         <h2>Implement vector storage in Azure Managed Redis</h2>
         <p class="desc">RediSearch convierte Redis en una base vectorial — útil cuando ya usás Redis como cache y no querés sumar otro sistema.</p>
+        <a class="source-link" href="https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/" target="_blank" rel="noopener">Ver módulo en Microsoft Learn ↗</a>
       </div>
     </div>
 
