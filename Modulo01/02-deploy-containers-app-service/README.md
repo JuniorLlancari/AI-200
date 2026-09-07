@@ -11,8 +11,7 @@ Ejemplos prácticos para el submódulo de Order 2 del Módulo 01 (`Indice.json`)
 | `03-configure-app-settings.sh` | Configure application settings |
 | `04-observe-troubleshoot.sh` | Observe and troubleshoot containerized apps |
 | `05-exercise-deployment-slots.sh` | Exercise - Deploy a container to Azure App Service (deployment slots, swap) |
-| `app.py`, `dockerfile` | Imagen de ejemplo (Flask) usada en los deploys |
-| `dotnet/` | Misma app (`/`, `/health`, env vars `ENVIRONMENT`/`DB_PASSWORD`/`PORT`), versión .NET 10 (minimal API). Build: `az acr build -r acrappsvclab -t app-documentor-dotnet:v01 ./dotnet` |
+| `dotnet/` | App de ejemplo (`/`, `/health`, env vars `ENVIRONMENT`/`DB_PASSWORD`/`PORT`), .NET 10 (minimal API) -- imagen usada en los deploys de este submódulo |
 | `settings.json` | Salida de ejemplo de `az webapp config appsettings list` (generada por `03`) |
 
 `Introduction`, `Module assessment` y `Summary` no tienen ejercicio (son teoría/quiz).

@@ -2,8 +2,8 @@
 # Unit: Deploy containers to Azure App Service
 
 # --- LOCAL: validar la imagen antes de subirla a Azure ---
-# Construye la imagen con Docker local usando el Dockerfile del directorio actual (".").
-docker build -t app-documentor .
+# Construye la imagen con Docker local usando el Dockerfile dentro de ./dotnet (build context).
+docker build -t app-documentor ./dotnet
 # Lista las imágenes locales, para confirmar que "app-documentor" quedó creada.
 docker image ls
 # Levanta un contenedor de prueba en background (-d) mapeando el puerto local 5000 al
@@ -19,16 +19,16 @@ az group create -n rg-appservice-lab -l canadacentral
 az acr create -n acrappsvclab -g rg-appservice-lab --sku Basic
 # Reconstruye la MISMA imagen pero en la nube (ACR), para que App Service pueda tirar de
 # ella sin depender de que exista en tu Docker local.
-az acr build -r acrappsvclab -t app-documentor:v01 .
+az acr build -r acrappsvclab -t app-documentor:v01 ./dotnet
 
 # App Service Plan: el "servidor"/conjunto de cómputo (CPU, RAM) donde corren una o más Web Apps.
 # --sku B1 = nivel Basic (sin autoscale, sin slots de deployment ilimitados, más económico); 
 # --is-linux porque los contenedores Linux requieren un plan Linux, no Windows.
 az appservice plan create -n plan-appservice-lab -g rg-appservice-lab --sku B1 --is-linux
-# La Web App en sí: el recurso que efectivamente corre la imagen. --container-image-name
+# La Web App en sí: el recurso que efectivamente corre la imagen. -c (--container-image-name)
 # le dice de qué imagen (registry/repo:tag) tirar al arrancar.
 az webapp create -n docprocessor-lab-001 -g rg-appservice-lab -p plan-appservice-lab \
-  --container-image-name acrappsvclab.azurecr.io/app-documentor:v01
+  -c acrappsvclab.azurecr.io/app-documentor:v01
 
 # Managed identity para autenticar contra ACR sin usuario/contraseña.
 # "identity assign" crea una identidad de Azure AD propia de esta Web App (sin credenciales  que manejar a mano);
