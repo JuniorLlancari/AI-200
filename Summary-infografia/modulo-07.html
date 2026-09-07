@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 7 — Integrate backend services for AI solutions</title>
+<style>
+  :root {
+    --bg: #0b1220; --bg-soft: #111a2e; --card: #16213b; --card-border: #22304f;
+    --text: #e8edf7; --text-dim: #9fb0cc; --azure: #3b9cf2; --azure-soft: #1c3a5e;
+    --teal: #34d1b6; --amber: #f2b33b; --amber-soft: #3a2d0f; --pink: #f2699c;
+    --radius: 14px; --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text); line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  nav.top { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none; padding: 7px 16px; border-radius: 999px;
+    font-size: 0.85rem; border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 40px; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border); }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure); border: 1px solid #2a5a8a;
+    padding: 5px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd { font-family: 'Cascadia Code', Consolas, monospace; background: var(--code-bg); color: var(--teal); padding: 2px 7px; border-radius: 6px; font-size: 0.85em; }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 10px 14px; color: var(--teal); font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem; margin: 10px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  @media (max-width: 760px) { .compare3 { grid-template-columns: 1fr; } }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill { background: var(--bg-soft); border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px; }
+
+  table.mini { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.8rem; }
+  table.mini th, table.mini td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--card-border); }
+  table.mini th { color: var(--azure); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.mini td { color: var(--text-dim); }
+  table.mini tr:last-child td { border-bottom: none; }
+
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber); border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0; color: #f2d9a3; font-size: 0.84rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  .stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 10px 0; }
+  .stat-tile { flex: 1; min-width: 120px; background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 12px; text-align: center; }
+  .stat-tile .value { display: block; font-size: 1.05rem; font-weight: 700; color: var(--azure); }
+  .stat-tile .label { font-size: 0.7rem; color: var(--text-dim); }
+
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem; border-top: 1px solid var(--card-border); padding-top: 22px; }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html" class="active">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 7 de 9</span>
+    <h1>Integrate backend services for AI solutions</h1>
+    <p class="subtitle">Cómo desacoplar componentes de IA con mensajería confiable (Service Bus), reaccionar a eventos sin polling (Event Grid), y correr cómputo serverless (Functions).</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. Service Bus</a>
+    <a href="#sub2">2. Event Grid</a>
+    <a href="#sub3">3. Functions</a>
+  </nav>
+
+  <!-- ================= SUBMÓDULO 1: Service Bus ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Queue and process AI operations with Azure Service Bus</h2>
+        <p class="desc">Colas y topics para desacoplar API de procesamiento, con entrega confiable de verdad.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Por qué mensajería en IA</h3>
+        <p>La inferencia tiene latencia <strong>impredecible</strong> (2s vs 30s para la misma API). Si la API espera de forma síncrona, un pico de tráfico llena el thread pool y todo se cae en cascada. Encolar el request y responder al toque desacopla el ritmo de llegada del ritmo de procesamiento.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Tres patrones clave</h3>
+        <ul>
+          <li><strong>Load leveling</strong> — la cola absorbe picos; los workers consumen a ritmo constante y sostenible.</li>
+          <li><strong>Competing consumers</strong> — varios workers en la misma cola, cada mensaje va a uno solo; escalar es agregar workers, sin tocar código.</li>
+          <li><strong>Temporal decoupling</strong> — productor y consumidor no necesitan estar online al mismo tiempo (útil durante deploys/reinicios).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Queue vs Topic+Subscriptions</h3>
+        <div class="compare">
+          <div class="box"><h4>Queue</h4><p>Un solo consumidor por mensaje. Para un pipeline de procesamiento único (ej. inferencia → guardar resultado).</p></div>
+          <div class="box"><h4>Topic + Subscriptions</h4><p>Cada subscription recibe su propia copia — varios servicios reaccionan de forma independiente al mismo evento (notificar, auditar, actualizar dashboard).</p></div>
+        </div>
+        <p>Las subscriptions soportan <strong>filtros</strong> (SQL o por correlación) para enrutar solo los mensajes que le interesan a cada una, sin lógica de filtrado en el consumidor.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Payloads grandes: claim-check</h3>
+        <p>Standard soporta hasta 256 KB, Premium hasta 100 MB. Para documentos/imágenes más grandes, subir el archivo a Blob Storage y mandar por Service Bus solo la <strong>referencia</strong> (URI) — el mensaje queda liviano y barato de transportar.</p>
+        <p>El <code>correlation_id</code> sigue al request end-to-end: útil para rastrear una falla a través de API → cola → worker → resultado.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Procesar de forma confiable</h3>
+        <div class="compare">
+          <div class="box"><h4>Receive-and-delete</h4><p>Se borra al entregar. Más rápido, pero si el worker crashea a mitad de proceso, el mensaje se pierde.</p></div>
+          <div class="box"><h4>Peek-lock (default, recomendado)</h4><p>Se bloquea, no se borra. El consumidor confirma explícito con <code>complete</code>/<code>abandon</code>/<code>dead-letter</code>/<code>defer</code>. Si no confirma a tiempo, vuelve a la cola.</p></div>
+        </div>
+        <p>Superado el <code>max_delivery_count</code> (default 10), el mensaje va solo a la <strong>Dead-Letter Queue (DLQ)</strong> — ahí se investigan fallas sistemáticas en vez de reintentar para siempre. Para tareas largas, <code>AutoLockRenewer</code> extiende el lock automáticamente en vez de que expire a mitad de la inferencia.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2: Event Grid ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Develop event-driven AI workflows with Azure Event Grid</h2>
+        <p class="desc">Reaccionar a cambios de estado sin polling — routing de eventos con latencia sub-segundo.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Piezas del rompecabezas</h3>
+        <ul>
+          <li><strong>Event</strong> — notificación liviana ("pasó X"), no el recurso completo.</li>
+          <li><strong>Topics</strong>: <em>system</em> (automáticos, de servicios Azure), <em>custom</em> (los creás vos para eventos de tu app).</li>
+          <li><strong>Event subscription</strong> — qué eventos de un topic, con qué filtro, van a qué handler.</li>
+          <li><strong>Event handlers</strong> — Functions, Service Bus, webhooks, Storage Queues.</li>
+        </ul>
+        <p>Un caso típico: subscribirse a <code>Microsoft.Storage.BlobCreated</code> para disparar un pipeline de embeddings apenas llega un documento nuevo.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Schema: CloudEvents</h3>
+        <span class="cmd-block">{
+  "specversion": "1.0",
+  "type": "com.contoso.ai.InferenceCompleted",
+  "source": "/services/content-moderation",
+  "id": "a1b2c3d4-...",
+  "subject": "/pipelines/moderation/batch-42",
+  "data": { "modelName": "...", "resultLocation": "..." }
+}</span>
+        <p>Estándar (CNCF), no propietario de Azure — interoperable con sistemas fuera de Azure. <code>type</code> + <code>source</code> identifican el evento; <code>subject</code> habilita filtrado jerárquico.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Filtrado</h3>
+        <ul>
+          <li><strong>Por tipo</strong> — solo <code>com.contoso.ai.InferenceCompleted</code>, por ejemplo.</li>
+          <li><strong>Por subject</strong> — <code>subjectBeginsWith</code>/<code>subjectEndsWith</code>.</li>
+          <li><strong>Advanced filters</strong> — sobre el contenido del payload (<code>data.confidence NumberGreaterThan 0.9</code>) para enrutar por umbral de confianza, modelo, o estado.</li>
+        </ul>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Entrega, reintentos y confiabilidad</h3>
+        <p>Event Grid espera una respuesta HTTP 200-204 dentro de 30s. Si falla, reintenta con backoff exponencial:</p>
+        <div class="stat-row">
+          <div class="stat-tile"><span class="value">10s → 30s → 1m</span><span class="label">primeros reintentos</span></div>
+          <div class="stat-tile"><span class="value">5m → 30m → 1h</span><span class="label">siguen espaciándose</span></div>
+          <div class="stat-tile"><span class="value">hasta 24h</span><span class="label">TTL default del evento</span></div>
+        </div>
+        <p>Garantiza <strong>at-least-once</strong> — tu handler puede recibir el mismo evento más de una vez, así que debe ser <strong>idempotente</strong> (usar el <code>id</code> para deduplicar). Configurar un <strong>dead-letter destination</strong> (Blob Storage) para no perder eventos que agotan los reintentos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 3: Functions ================= -->
+  <section class="submodule" id="sub3">
+    <div class="submodule-header">
+      <span class="num">3</span>
+      <div>
+        <h2>Build serverless AI backends with Azure Functions</h2>
+        <p class="desc">Cómputo bajo demanda: endpoints de inferencia, procesadores de cola, sin gestionar servidores.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Cold start en cargas de IA</h3>
+        <p>Es un evento <strong>por instancia</strong>, no por request — solo la primera invocación a una instancia nueva lo sufre. En IA se agrava porque las librerías de ML son pesadas de cargar, y encima hay que inicializar clientes/config al arrancar.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Flex Consumption vs Premium</h3>
+        <div class="compare">
+          <div class="box"><h4>Flex Consumption (default)</h4><p>Escala por función, memoria configurable (512/2048/4096 MB), <em>always-ready</em> opcional por función para mitigar cold start sin perder el resto serverless.</p></div>
+          <div class="box"><h4>Premium</h4><p>Elimina el cold start del todo — siempre hay ≥1 worker precalentado. Para funciones que corren casi continuo.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>El límite de 230s</h3>
+        <p>Todo HTTP trigger tiene un timeout de <strong>230s impuesto por el Load Balancer</strong> — no depende del plan ni de <code>functionTimeout</code>. Para inferencia larga, patrón <strong>async request-reply</strong>: la función HTTP encola el trabajo en Service Bus y devuelve <code>202 Accepted</code> con una URL de estado; otra función (trigger de Service Bus, sin límite de tiempo) hace el trabajo pesado.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Triggers y bindings</h3>
+        <ul>
+          <li><strong>HTTP trigger</strong> — endpoint de inferencia; <code>auth_level</code> controla si necesita key.</li>
+          <li><strong>Service Bus trigger</strong> — procesa mensajes; <code>maxConcurrentCalls=1</code> si cada invocación necesita todos los recursos de la instancia.</li>
+          <li><strong>Output bindings</strong> (Blob, Cosmos DB) — guardan resultados sin código de SDK explícito.</li>
+        </ul>
+        <p>Para servicios sin binding (Document Intelligence, Azure OpenAI), se instancia el cliente SDK a nivel de módulo (fuera del handler) para reusar conexión entre invocaciones.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Identidad y acceso</h3>
+        <p><strong>Identity-based connections</strong> reemplazan connection strings guardadas: en vez de un secreto completo, solo el endpoint (ej. <code>ServiceBusConnection__fullyQualifiedNamespace</code>) — la Function autentica con su managed identity y el rol RBAC asignado.</p>
+        <p>Para HTTP, las <strong>authorization keys</strong> (function/host/system/master) dan una barrera básica de acceso — no reemplazan verificar identidad real del caller (eso lo agrega API Management o Easy Auth).</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pill-row" style="justify-content:center; margin-top: -20px; margin-bottom: 20px;">
+      <span class="pill">Load Leveling</span>
+      <span class="pill">Competing Consumers</span>
+      <span class="pill">Peek-Lock</span>
+      <span class="pill">Dead-Letter Queue</span>
+      <span class="pill">Claim-Check</span>
+      <span class="pill">CloudEvents</span>
+      <span class="pill">At-least-once</span>
+      <span class="pill">Cold Start</span>
+      <span class="pill">Async Request-Reply</span>
+      <span class="pill">Managed Identity</span>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — se irá ampliando con un módulo nuevo a medida que avance el curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>

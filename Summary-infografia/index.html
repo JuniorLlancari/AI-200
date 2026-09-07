@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografías — AI-200T00</title>
+<style>
+  :root {
+    --bg: #0b1220; --card: #16213b; --card-border: #22304f;
+    --text: #e8edf7; --text-dim: #9fb0cc; --azure: #3b9cf2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wrap { max-width: 720px; padding: 40px 24px; text-align: center; }
+  h1 { font-size: 1.7rem; margin-bottom: 6px; }
+  p.subtitle { color: var(--text-dim); margin-top: 0; margin-bottom: 32px; }
+  .list { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+  .item {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 16px 20px;
+    text-decoration: none; color: var(--text);
+    transition: border-color 0.15s ease;
+  }
+  .item.ready:hover { border-color: var(--azure); }
+  .item.pending { opacity: 0.45; cursor: default; }
+  .num {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--azure); color: #06101f; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem;
+  }
+  .item.pending .num { background: #2a3a5a; color: var(--text-dim); }
+  .item .title { font-weight: 600; font-size: 0.98rem; }
+  .item .status { margin-left: auto; font-size: 0.78rem; color: var(--text-dim); }
+  .section-title {
+    text-align: left; font-size: 0.78rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
+    margin: 28px 0 12px;
+  }
+  .section-title:first-of-type { margin-top: 0; }
+  .icon-badge {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--teal, #1c3a34); color: #34d1b6; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+    background: #12332c; border: 1px solid #1f5148;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Infografías de repaso</h1>
+  <p class="subtitle">AI-200T00 · Develop AI cloud solutions on Azure — un resumen visual por módulo, se agregan a medida que avanza el curso.</p>
+
+  <p class="section-title">Módulos</p>
+  <div class="list">
+    <a class="item ready" href="modulo-01.html">
+      <span class="num">1</span>
+      <span class="title">Implement container application hosting on Azure</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-02.html">
+      <span class="num">2</span>
+      <span class="title">Deploy and manage apps on Azure Container Apps</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-03.html">
+      <span class="num">3</span>
+      <span class="title">Deploy and monitor applications on Azure Kubernetes Service</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-04.html">
+      <span class="num">4</span>
+      <span class="title">Develop AI solutions with Azure Cosmos DB for NoSQL</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-05.html">
+      <span class="num">5</span>
+      <span class="title">Develop AI solutions with Azure Database for PostgreSQL</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-06.html">
+      <span class="num">6</span>
+      <span class="title">Enhance AI solutions with Azure Managed Redis</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-07.html">
+      <span class="num">7</span>
+      <span class="title">Integrate backend services for AI solutions</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-08.html">
+      <span class="num">8</span>
+      <span class="title">Manage application secrets and configuration for AI solutions</span>
+      <span class="status">Listo</span>
+    </a>
+    <a class="item ready" href="modulo-09.html">
+      <span class="num">9</span>
+      <span class="title">Observe and troubleshoot apps on Azure</span>
+      <span class="status">Listo</span>
+    </a>
+  </div>
+
+  <p class="section-title">Referencias rápidas</p>
+  <div class="list">
+    <a class="item ready" href="comandos.html">
+      <span class="icon-badge">⌘</span>
+      <span class="title">Comandos — Azure CLI Shorthand</span>
+      <span class="status">Listo</span>
+    </a>
+  </div>
+</div>
+</body>
+</html>

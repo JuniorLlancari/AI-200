@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comandos — Azure CLI Shorthand</title>
+<style>
+  :root {
+    --bg: #0b1220;
+    --bg-soft: #111a2e;
+    --card: #16213b;
+    --card-border: #22304f;
+    --text: #e8edf7;
+    --text-dim: #9fb0cc;
+    --azure: #3b9cf2;
+    --azure-soft: #1c3a5e;
+    --teal: #34d1b6;
+    --amber: #f2b33b;
+    --amber-soft: #3a2d0f;
+    --pink: #f2699c;
+    --radius: 14px;
+    --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  /* ---------- Nav ---------- */
+  nav.top {
+    display: flex; justify-content: center; gap: 8px;
+    margin-bottom: 26px; flex-wrap: wrap;
+  }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none;
+    padding: 7px 16px; border-radius: 999px; font-size: 0.85rem;
+    border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  /* ---------- Header ---------- */
+  header.hero { text-align: center; padding: 8px 16px 36px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure);
+    border: 1px solid #2a5a8a; padding: 5px 14px; border-radius: 999px;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1rem; margin: 0; max-width: 620px; margin: 0 auto; }
+
+  /* ---------- Sections / cards ---------- */
+  section.block { margin-bottom: 34px; }
+  h2 {
+    font-size: 1.15rem; margin: 0 0 14px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  h3 { font-size: 0.98rem; color: var(--azure); margin: 22px 0 10px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 20px 22px;
+  }
+
+  code {
+    font-family: 'Cascadia Code', Consolas, monospace;
+    background: var(--code-bg); color: var(--teal);
+    padding: 2px 7px; border-radius: 6px; font-size: 0.85em;
+  }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border);
+    border-radius: 8px; padding: 12px 16px; color: var(--teal);
+    font-family: 'Cascadia Code', Consolas, monospace; font-size: 0.85rem;
+    margin: 12px 0; overflow-x: auto; white-space: pre;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--card-border); }
+  th { color: var(--azure); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  td { color: var(--text-dim); }
+  td code, th code { white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Distingue visualmente cada columna: comando (azul), flag largo (rosa), flag corto (verde) */
+  code.flag-cmd { color: var(--azure); }
+  code.flag-long { color: var(--pink); }
+  code.flag-short { color: var(--teal); }
+
+  .note {
+    background: var(--bg-soft); border-left: 3px solid var(--azure);
+    border-radius: 8px; padding: 12px 16px; margin: 0 0 20px;
+    color: var(--text-dim); font-size: 0.9rem;
+  }
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber);
+    border-radius: 8px; padding: 10px 16px; margin: 12px 0;
+    color: #f2d9a3; font-size: 0.85rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  ol { margin: 0; padding-left: 20px; color: var(--text-dim); font-size: 0.9rem; }
+  ol li { margin-bottom: 10px; }
+  ol li:last-child { margin-bottom: 0; }
+
+  footer {
+    margin-top: 50px; text-align: center; color: var(--text-dim); font-size: 0.82rem;
+    border-top: 1px solid var(--card-border); padding-top: 22px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html" class="active">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">Referencia rápida</span>
+    <h1>Azure CLI — Flags Cortos (Shorthand)</h1>
+    <p class="subtitle">Referencia de los parámetros abreviados más usados, organizados por los comandos que ya practicamos (ACR, ACR Tasks, App Service, Resource Groups, Key Vault, Cosmos DB).</p>
+  </header>
+
+  <section class="block">
+    <div class="note">
+      Esta página muestra tal cual el contenido de <code>az-cli/AzCli-Shorthand.md</code> — se actualiza editando ese archivo.
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Flags globales (aplican a casi todos los comandos)</h2>
+    <div class="card">
+      <table>
+        <tr><th>Largo</th><th>Corto</th><th>Uso</th></tr>
+        <tr><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td><td>Nombre del resource group</td></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td><td>Nombre del recurso</td></tr>
+        <tr><td><code class="flag-long">--location</code></td><td><code class="flag-short">-l</code></td><td>Región de Azure</td></tr>
+        <tr><td><code class="flag-long">--output</code></td><td><code class="flag-short">-o</code></td><td>Formato de salida (<code>table</code>, <code>json</code>, <code>tsv</code>, <code>jsonc</code>)</td></tr>
+        <tr><td><code class="flag-long">--subscription</code></td><td><code class="flag-short">-s</code>*</td><td>Suscripción específica (*ojo: en algunos comandos <code>-s</code> significa otra cosa, revisa el contexto)</td></tr>
+        <tr><td><code class="flag-long">--query</code></td><td><em>(sin corto)</em></td><td>Filtro JMESPath sobre el resultado</td></tr>
+        <tr><td><code class="flag-long">--yes</code></td><td><code class="flag-short">-y</code>*</td><td>Confirmar sin preguntar (*no todos los comandos lo soportan)</td></tr>
+        <tr><td><code class="flag-long">--help</code></td><td><code class="flag-short">-h</code></td><td>Ayuda del comando</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><code>az group</code> (Resource Groups)</h2>
+    <div class="card">
+      <span class="cmd-block">az group create -n rg-lab -l eastus</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--location</code></td><td><code class="flag-short">-l</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><code>az acr</code> (Container Registry)</h2>
+    <div class="card">
+      <span class="cmd-block">az acr create -n acrlab001 -g rg-lab --sku Basic
+az acr build -r acrlab001 -t inference-api:v1.0.0 .</span>
+      <table>
+        <tr><th>Comando</th><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-cmd">acr create</code></td><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-cmd">acr create</code></td><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td></tr>
+        <tr><td><code class="flag-cmd">acr build</code></td><td><code class="flag-long">--registry</code></td><td><code class="flag-short">-r</code></td></tr>
+        <tr><td><code class="flag-cmd">acr build</code></td><td><code class="flag-long">--image</code></td><td><code class="flag-short">-t</code></td></tr>
+        <tr><td><code class="flag-cmd">acr repository show</code></td><td><code class="flag-long">--name</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-cmd">acr repository show</code></td><td><code class="flag-long">--image</code></td><td><em>(sin corto)</em></td></tr>
+      </table>
+      <div class="warning">⚠️ <strong>Nota:</strong> <code>--sku</code> <strong>no tiene</strong> versión corta en ningún comando <code>acr</code>.</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><code>az acr task</code> (ACR Tasks)</h2>
+    <div class="card">
+      <span class="cmd-block">az acr task create -r acrlab001 -n nightly-build-lab --cmd "alpine date" --schedule "* * * * *"</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--registry</code></td><td><code class="flag-short">-r</code></td></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--cmd</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-long">--schedule</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-long">--context</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-long">--image</code></td><td><em>(sin corto en <code class="flag-cmd">task create</code>, a diferencia de <code class="flag-cmd">acr build</code>)</em></td></tr>
+      </table>
+      <div class="warning">⚠️ <strong>Recuerda:</strong> <code>--image</code> en <code>az acr build</code> <strong>sí</strong> tiene corto (<code>-t</code>), pero en <code>az acr task create</code> <strong>no</strong> — hay que escribirlo completo.</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><code>az appservice plan</code> (App Service Plan)</h2>
+    <div class="card">
+      <span class="cmd-block">az appservice plan create -n plan-lab -g rg-lab --sku B1 --is-linux</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td></tr>
+        <tr><td><code class="flag-long">--sku</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-long">--is-linux</code></td><td><em>(sin corto, es flag booleano)</em></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><code>az webapp</code> (Web App / App Service)</h2>
+    <div class="card">
+      <span class="cmd-block">az webapp create -g rg-lab -p plan-lab -n docprocessor-001 --container-image-name acrlab001.azurecr.io/docprocessor:v1</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--plan</code></td><td><code class="flag-short">-p</code></td></tr>
+        <tr><td><code class="flag-long">--container-image-name</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-long">--runtime</code></td><td><em>(sin corto)</em></td></tr>
+      </table>
+
+      <h3><code>az webapp config appsettings set</code></h3>
+      <span class="cmd-block">az webapp config appsettings set -g rg-lab -n docprocessor-001 --settings WEBSITES_PORT=8000</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--settings</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-long">--slot-settings</code></td><td><em>(sin corto)</em></td></tr>
+      </table>
+
+      <h3><code>az webapp log</code></h3>
+      <span class="cmd-block">az webapp log tail -g rg-lab -n docprocessor-001</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><code>az keyvault</code></h2>
+    <div class="card">
+      <span class="cmd-block">az keyvault create -n kv-lab -g rg-lab -l eastus</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td></tr>
+        <tr><td><code class="flag-long">--location</code></td><td><code class="flag-short">-l</code></td></tr>
+      </table>
+
+      <h3><code>az keyvault secret set</code></h3>
+      <span class="cmd-block">az keyvault secret set --vault-name kv-lab -n MiSecreto --value "valor"</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--vault-name</code></td><td><em>(sin corto)</em></td></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--value</code></td><td><em>(sin corto)</em></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><code>az cosmosdb</code></h2>
+    <div class="card">
+      <span class="cmd-block">az cosmosdb create -n cosmos-lab -g rg-lab</span>
+      <table>
+        <tr><th>Largo</th><th>Corto</th></tr>
+        <tr><td><code class="flag-long">--name</code></td><td><code class="flag-short">-n</code></td></tr>
+        <tr><td><code class="flag-long">--resource-group</code></td><td><code class="flag-short">-g</code></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Tabla resumen — los que más vas a usar</h2>
+    <div class="card">
+      <table>
+        <tr><th>Flag corto</th><th>Significa</th><th>Aparece en</th></tr>
+        <tr><td><code class="flag-short">-g</code></td><td><code class="flag-long">--resource-group</code></td><td>Casi todos los comandos de recursos</td></tr>
+        <tr><td><code class="flag-short">-n</code></td><td><code class="flag-long">--name</code></td><td>Casi todos los comandos de recursos</td></tr>
+        <tr><td><code class="flag-short">-l</code></td><td><code class="flag-long">--location</code></td><td><code class="flag-cmd">group create</code>, <code class="flag-cmd">keyvault create</code>, etc.</td></tr>
+        <tr><td><code class="flag-short">-r</code></td><td><code class="flag-long">--registry</code></td><td>Todos los <code class="flag-cmd">az acr *</code></td></tr>
+        <tr><td><code class="flag-short">-t</code></td><td><code class="flag-long">--image</code></td><td>Solo <code class="flag-cmd">az acr build</code> (¡no en <code class="flag-cmd">acr task create</code>!)</td></tr>
+        <tr><td><code class="flag-short">-p</code></td><td><code class="flag-long">--plan</code></td><td><code class="flag-cmd">az webapp create</code></td></tr>
+        <tr><td><code class="flag-short">-o</code></td><td><code class="flag-long">--output</code></td><td>Cualquier comando (table/json/tsv)</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>⚠️ Errores comunes con flags cortos (ya los viviste en la práctica)</h2>
+    <div class="card">
+      <ol>
+        <li><strong><code>--t</code> no existe</strong> — el corto de <code>--image</code> en <code>acr build</code> es <code>-t</code> (una sola letra), no <code>--t</code></li>
+        <li><strong>No todos los flags tienen versión corta</strong> — <code>--cmd</code>, <code>--schedule</code>, <code>--sku</code>, <code>--settings</code> casi siempre van completos</li>
+        <li><strong>El mismo corto puede significar cosas distintas</strong> según el comando (ej: <code>-s</code> a veces es <code>--subscription</code>, a veces <code>--sku</code> en otros contextos) — si tienes duda, usa <code>az &lt;comando&gt; --help</code> para confirmar</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Cómo verificar los cortos de cualquier comando tú mismo</h2>
+    <div class="card">
+      <span class="cmd-block">az acr task create --help</span>
+      <p style="color: var(--text-dim); font-size: 0.9rem; margin: 10px 0;">Esto lista todos los parámetros — los que tienen forma corta la muestran junto al nombre largo, ej:</p>
+      <span class="cmd-block">--name -n [Required] : The name of the task.</span>
+    </div>
+  </section>
+
+  <footer>
+    Fuente: <code>Summary-infografia/az-cli/AzCli-Shorthand.md</code> — edita ese archivo y actualiza esta página para reflejar cambios.
+  </footer>
+
+</div>
+</body>
+</html>

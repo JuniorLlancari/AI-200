@@ -216,6 +216,789 @@
           ]
         }
       ]
+    },
+    {
+      "Order": 3,
+      "Tittle": "Deploy and monitor applications on Azure Kubernetes Service",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Deploy applications to Azure Kubernetes Service",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/1-introduction"
+            },
+            {
+              "Name": "Create Kubernetes deployment manifests",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/2-create-deployment-manifests"
+            },
+            {
+              "Name": "Expose applications in Azure Kubernetes Services",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/3-expose-applications"
+            },
+            {
+              "Name": "Deploy applications to Azure Kubernetes Services",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/4-deploy-verify-results"
+            },
+            {
+              "Name": "Exercise - Deploy an AI inference API to Azure Kubernetes Service",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/5-exercise-deploy-ai-api"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/6-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/deploy-apps-azure-kubernetes-service/7-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Configure applications on Azure Kubernetes Service",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/1-introduction"
+            },
+            {
+              "Name": "Define ConfigMaps for application settings",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/2-define-configmaps"
+            },
+            {
+              "Name": "Implement secrets for sensitive data",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/3-implement-secrets"
+            },
+            {
+              "Name": "Attach persistent storage to an app",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/4-persistent-storage"
+            },
+            {
+              "Name": "Exercise - Configure apps on Azure Kubernetes Service",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/5-exercise-configure-apps"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/6-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/configure-apps-azure-kubernetes-service/7-summary"
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Name": "Monitor and troubleshoot applications on Azure Kubernetes Service",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/1-introduction"
+            },
+            {
+              "Name": "Monitor application logs and metrics",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/2-monitor-logs-metrics"
+            },
+            {
+              "Name": "Troubleshoot pods and services",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/3-troubleshoot-pods-services"
+            },
+            {
+              "Name": "Verify service connectivity and endpoints",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/4-verify-connectivity"
+            },
+            {
+              "Name": "Exercise - Troubleshoot apps on Azure Kubernetes Service",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/5-exercise-troubleshoot-apps"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/6-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-azure-kubernetes-service/7-summary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 4,
+      "Tittle": "Develop AI solutions with Azure Cosmos DB for NoSQL",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Build queries for Azure Cosmos DB for NoSQL",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/1-introduction"
+            },
+            {
+              "Name": "Explore Azure Cosmos DB for NoSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/2-explore-cosmos-db-nosql"
+            },
+            {
+              "Name": "Implement the Azure Cosmos DB for NoSQL SDK",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/3-implement-cosmos-db-sdk"
+            },
+            {
+              "Name": "Query Azure Cosmos DB for NoSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/4-query-cosmos-db-nosql"
+            },
+            {
+              "Name": "Exercise - Build a RAG document store on Azure Cosmos DB for NoSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/5-exercise-build-rag-document-store"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/6-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-cosmos-db/7-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Implement vector search on Azure Cosmos DB for NoSQL",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/1-introduction"
+            },
+            {
+              "Name": "Store and retrieve embeddings in Azure Cosmos DB",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/2-store-retrieve-embeddings"
+            },
+            {
+              "Name": "Execute vector similarity queries for semantic search",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/3-execute-vector-similarity-queries"
+            },
+            {
+              "Name": "Combine vector similarity results with metadata filtering",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/4-combine-vector-metadata-filtering"
+            },
+            {
+              "Name": "Use the change feed to trigger embedding refresh",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/5-change-feed-trigger-embedding-refresh"
+            },
+            {
+              "Name": "Exercise - Build a semantic search application with Azure Cosmos DB for NoSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/6-exercise-build-semantic-search"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/7-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-cosmos-db/8-summary"
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Name": "Optimize query performance for Azure Cosmos DB for NoSQL",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/1-introduction"
+            },
+            {
+              "Name": "Understand indexes in Azure Cosmos DB",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/2-understand-indexes-cosmos-db"
+            },
+            {
+              "Name": "Configure range and composite indexes",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/3-configure-range-composite-indexes"
+            },
+            {
+              "Name": "Tune vector indexes for embedding workloads",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/4-tune-vector-indexes-embeddings"
+            },
+            {
+              "Name": "Reduce RU costs with strategic indexing",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/5-reduce-ru-costs-strategic-indexing"
+            },
+            {
+              "Name": "Choose consistency levels for optimal performance",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/6-choose-consistency-levels-performance"
+            },
+            {
+              "Name": "Exercise - Optimize query performance with vector indexes on Azure Cosmos DB for NoSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/7-exercise-optimize-query-performance"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/8-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-query-performance-azure-cosmos-db/9-summary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 5,
+      "Tittle": "Develop AI solutions with Azure Database for PostgreSQL",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Build and query with Azure Database for PostgreSQL",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/1-introduction"
+            },
+            {
+              "Name": "Explore Azure Database for PostgreSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/2-explore-azure-database-postgresql"
+            },
+            {
+              "Name": "Connect to PostgreSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/3-connect-to-postgresql"
+            },
+            {
+              "Name": "Create and manage schemas",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/4-create-manage-schemas"
+            },
+            {
+              "Name": "Query data",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/5-query-data"
+            },
+            {
+              "Name": "Integrate SDKs and applications",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/6-integrate-sdks-apps"
+            },
+            {
+              "Name": "Exercise - Build an agent tool backend on Azure Database for PostgreSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/7-exercise-build-agent-tool-backend"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/8-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-query-azure-database-postgresql/9-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Implement vector search with Azure Database for PostgreSQL",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/1-introduction"
+            },
+            {
+              "Name": "Store and query embeddings with pgvector",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/2-store-query-embeddings-pgvector"
+            },
+            {
+              "Name": "Perform fast vector similarity search",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/3-perform-fast-vector-similarity-search"
+            },
+            {
+              "Name": "Manage index lifecycle and embedding updates",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/4-manage-index-lifecycle-embedding-updates"
+            },
+            {
+              "Name": "Run vector similarity search for semantic retrieval",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/5-run-vector-similarity-search-semantic-retrieval"
+            },
+            {
+              "Name": "Implement retrieval patterns for RAG pipelines",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/6-implement-retrieval-patterns-rag-pipelines"
+            },
+            {
+              "Name": "Exercise - Implement vector search on Azure Database for PostgreSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/7-exercise-implement-vector-search"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/8-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-search-azure-database-postgresql/9-summary"
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Name": "Optimize vector search in Azure Database for PostgreSQL",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/1-introduction"
+            },
+            {
+              "Name": "Tune PostgreSQL for pgvector",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/2-tune-postgresql-pgvector"
+            },
+            {
+              "Name": "Choose and configure vector indexes",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/3-choose-configure-vector-indexes"
+            },
+            {
+              "Name": "Optimize data layout",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/4-optimize-data-layout"
+            },
+            {
+              "Name": "Scale for high-volume workloads",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/5-scale-high-volume-workloads"
+            },
+            {
+              "Name": "Connection optimization",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/6-connection-optimization"
+            },
+            {
+              "Name": "Exercise - Optimize vector search performance in Azure Database for PostgreSQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/7-exercise-optimize-vector-search"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/8-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/optimize-vector-search-azure-database-postgresql/9-summary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 6,
+      "Tittle": "Enhance AI solutions with Azure Managed Redis",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Implement data operations in Azure Managed Redis",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/1-introduction"
+            },
+            {
+              "Name": "Explore Azure Managed Redis",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/2-explore-azure-managed-redis"
+            },
+            {
+              "Name": "Client libraries and development best practices",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/3-client-libraries-best-practices"
+            },
+            {
+              "Name": "Implement data operations",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/4-implement-data-operations"
+            },
+            {
+              "Name": "Exercise - Perform data operations in Azure Managed Redis",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/5-exercise-data-operations"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/6-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-data-operations-azure-managed-redis/7-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Implement event messaging with Azure Managed Redis",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/1-introduction"
+            },
+            {
+              "Name": "Publish and subscribe to events with Redis pub/sub",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/2-redis-pub-sub"
+            },
+            {
+              "Name": "Implement task queues with Redis Streams",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/3-redis-streams"
+            },
+            {
+              "Name": "Choose between broadcast and coordinated distribution",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/4-coordinate-multiple-subscribers"
+            },
+            {
+              "Name": "Exercise - Publish and subscribe to events in Azure Managed Redis",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/5-exercise-publish-subscribe-events-redis"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/6-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-event-messaging-azure-managed-redis/7-summary"
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Name": "Implement vector storage in Azure Managed Redis",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/1-introduction"
+            },
+            {
+              "Name": "Index and query vector data",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/2-index-query-vector-data"
+            },
+            {
+              "Name": "Choose vector types and indexing strategies",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/3-vector-types-index-strategy"
+            },
+            {
+              "Name": "Optimize Redis data structures for vector storage",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/4-optimize-redis-data-structure"
+            },
+            {
+              "Name": "Exercise - Implement semantic search in Azure Managed Redis",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/5-exercise-semantic-search-azure-managed-redis"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/6-module-assessment"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/implement-vector-storage-azure-managed-redis/7-summary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 7,
+      "Tittle": "Integrate backend services for AI solutions",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Queue and process AI operations with Azure Service Bus",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/1-introduction"
+            },
+            {
+              "Name": "Explore Azure Service Bus concepts and messaging in AI architectures",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/2-explore-service-bus-concepts"
+            },
+            {
+              "Name": "Choose between queues and topics with subscriptions",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/3-choose-queues-topics-subscriptions"
+            },
+            {
+              "Name": "Structure messages for AI workloads",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/4-structure-messages-ai-workloads"
+            },
+            {
+              "Name": "Process messages reliably",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/5-process-messages-reliably"
+            },
+            {
+              "Name": "Exercise - Process messages with Azure Service Bus",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/6-exercise-process-messages"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/7-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/queue-process-operations-service-bus/8-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Develop event-driven AI workflows with Azure Event Grid",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/1-introduction"
+            },
+            {
+              "Name": "Understand Azure Event Grid concepts and event-driven patterns for AI solutions",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/2-understand-event-grid-concepts"
+            },
+            {
+              "Name": "Work with event schemas and properties",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/3-event-schemas-properties"
+            },
+            {
+              "Name": "Configure delivery and retry policies for reliable event processing",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/4-delivery-retry-policies"
+            },
+            {
+              "Name": "Publish custom events from AI applications",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/5-publish-custom-events"
+            },
+            {
+              "Name": "Exercise - Publish and receive events with Azure Event Grid",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/6-exercise-publish-receive-events"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/7-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/event-driven-workflows-event-grid/8-summary"
+            }
+          ]
+        },
+        {
+          "Order": 3,
+          "Name": "Build serverless AI backends with Azure Functions",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/1-introduction"
+            },
+            {
+              "Name": "Understand Azure Functions hosting and scaling for AI workloads",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/2-understand-hosting-scaling"
+            },
+            {
+              "Name": "Set up the local development environment for Functions",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/3-set-up-local-development-environment"
+            },
+            {
+              "Name": "Create triggers and bindings for AI integration patterns",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/4-create-triggers-bindings-ai-patterns"
+            },
+            {
+              "Name": "Manage secrets and configuration in Functions",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/5-manage-secrets-configuration"
+            },
+            {
+              "Name": "Configure identity and access for Functions",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/6-configure-identity-access"
+            },
+            {
+              "Name": "Exercise - Create an MCP server with Azure Functions",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/7-exercise-create-mcp-server"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/8-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/build-backends-azure-functions/9-summary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 8,
+      "Tittle": "Manage application secrets and configuration for AI solutions",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Manage application secrets with Azure Key Vault",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/1-introduction"
+            },
+            {
+              "Name": "Store and organize secrets, keys, and certificates",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/2-store-organize-secrets"
+            },
+            {
+              "Name": "Retrieve secrets using Azure SDK client libraries",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/3-retrieve-secrets-sdk"
+            },
+            {
+              "Name": "Handle secret versioning and rotation",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/4-handle-versioning-rotation"
+            },
+            {
+              "Name": "Implement caching strategies to reduce Key Vault calls",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/5-implement-caching-strategies"
+            },
+            {
+              "Name": "Exercise - Manage secrets with Azure Key Vault",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/6-exercise-manage-secrets"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/7-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-secrets-key-vault/8-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Manage application settings with Azure App Configuration",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/1-introduction"
+            },
+            {
+              "Name": "Connect to App Configuration from application code",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/2-connect-app-configuration"
+            },
+            {
+              "Name": "Organize settings with labels and feature flags",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/3-organize-labels-feature-flags"
+            },
+            {
+              "Name": "Reference Key Vault secrets from App Configuration",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/4-reference-key-vault-secrets"
+            },
+            {
+              "Name": "Decide what to store in App Configuration vs Key Vault",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/5-decide-app-config-vs-key-vault"
+            },
+            {
+              "Name": "Exercise - Retrieve settings and secrets from Azure App Configuration",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/6-exercise-retrieve-settings"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/7-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/manage-app-settings-app-config/8-summary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Order": 9,
+      "Tittle": "Observe and troubleshoot apps on Azure",
+      "SubModules": [
+        {
+          "Order": 1,
+          "Name": "Instrument an app with OpenTelemetry",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/1-introduction"
+            },
+            {
+              "Name": "Explore OpenTelemetry and its role in observability",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/2-explore-opentelemetry-observability"
+            },
+            {
+              "Name": "Add the OpenTelemetry SDK to an application",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/3-add-opentelemetry-sdk"
+            },
+            {
+              "Name": "Configure spans and traces",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/4-configure-spans-traces"
+            },
+            {
+              "Name": "Export telemetry to Azure Monitor",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/5-export-telemetry-azure-monitor"
+            },
+            {
+              "Name": "Debug distributed flows with trace data",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/6-debug-distributed-flows-trace-data"
+            },
+            {
+              "Name": "Exercise - Instrument an app with the OpenTelemetry SDK",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/7-exercise-instrument-app-opentelemetry"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/8-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/instrument-app-opentelemetry/9-summary"
+            }
+          ]
+        },
+        {
+          "Order": 2,
+          "Name": "Analyze app telemetry with logs and metrics",
+          "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/",
+          "Units": [
+            {
+              "Name": "Introduction",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/1-introduction"
+            },
+            {
+              "Name": "Write basic KQL queries",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/2-write-basic-kql-queries"
+            },
+            {
+              "Name": "Explore logs for errors and performance",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/3-explore-logs-errors-performance"
+            },
+            {
+              "Name": "Build dashboards for app telemetry",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/4-build-dashboards-app-telemetry"
+            },
+            {
+              "Name": "Create workbooks for interactive analysis",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/5-create-workbooks-interactive-analysis"
+            },
+            {
+              "Name": "Set alerts for app failures and anomalies",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/6-set-alerts-app-failures-anomalies"
+            },
+            {
+              "Name": "Exercise - Query logs with KQL",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/7-exercise-query-logs-kql"
+            },
+            {
+              "Name": "Module assessment",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/8-knowledge-check"
+            },
+            {
+              "Name": "Summary",
+              "Link": "https://learn.microsoft.com/en-us/training/modules/analyze-telemetry-logs-metrics/9-summary"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

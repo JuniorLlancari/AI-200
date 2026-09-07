@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 3 — Deploy and monitor applications on Azure Kubernetes Service</title>
+<style>
+  :root {
+    --bg: #0b1220; --bg-soft: #111a2e; --card: #16213b; --card-border: #22304f;
+    --text: #e8edf7; --text-dim: #9fb0cc; --azure: #3b9cf2; --azure-soft: #1c3a5e;
+    --teal: #34d1b6; --amber: #f2b33b; --amber-soft: #3a2d0f; --pink: #f2699c;
+    --radius: 14px; --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text); line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  nav.top { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none; padding: 7px 16px; border-radius: 999px;
+    font-size: 0.85rem; border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 40px; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border); }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure); border: 1px solid #2a5a8a;
+    padding: 5px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  .flow-section { margin: 10px 0 40px; }
+  .flow-title { text-align: center; font-size: 1rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 22px; font-weight: 600; }
+
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd { font-family: 'Cascadia Code', Consolas, monospace; background: var(--code-bg); color: var(--teal); padding: 2px 7px; border-radius: 6px; font-size: 0.85em; }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 10px 14px; color: var(--teal); font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem; margin: 10px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  @media (max-width: 760px) { .compare3 { grid-template-columns: 1fr; } }
+
+  .hierarchy { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .hierarchy .lvl { border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; border: 1px solid var(--card-border); }
+  .hierarchy .lvl1 { background: var(--azure-soft); margin-left: 0; }
+  .hierarchy .lvl2 { background: #1a2a44; margin-left: 20px; }
+  .hierarchy .lvl3 { background: #1f2e4a; margin-left: 40px; }
+  .hierarchy .lvl b { color: var(--text); }
+  .hierarchy .lvl span { color: var(--text-dim); }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill { background: var(--bg-soft); border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px; }
+
+  table.mini { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.8rem; }
+  table.mini th, table.mini td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--card-border); }
+  table.mini th { color: var(--azure); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.mini td { color: var(--text-dim); }
+  table.mini tr:last-child td { border-bottom: none; }
+
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber); border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0; color: #f2d9a3; font-size: 0.84rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem; border-top: 1px solid var(--card-border); padding-top: 22px; }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html" class="active">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 3 de 9</span>
+    <h1>Deploy and monitor applications on Azure Kubernetes Service</h1>
+    <p class="subtitle">De un manifiesto YAML a una API de inferencia corriendo en AKS: desplegar, exponer, configurar con ConfigMaps/Secrets, dar almacenamiento persistente, y diagnosticar cuando algo falla.</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. Deploy</a>
+    <a href="#sub2">2. Configure</a>
+    <a href="#sub3">3. Monitor</a>
+  </nav>
+
+  <section class="flow-section">
+    <p class="flow-title">Jerarquía básica de Kubernetes</p>
+    <div class="hierarchy" style="max-width: 720px; margin: 0 auto;">
+      <div class="lvl lvl1"><b>Deployment</b> <span>— el estado deseado: qué imagen, cuántas réplicas, qué recursos. Vos lo declarás en YAML.</span></div>
+      <div class="lvl lvl2"><b>Pod</b> <span>— una instancia en ejecución de ese template. Si muere, el Deployment crea otro.</span></div>
+      <div class="lvl lvl3"><b>Container</b> <span>— tu imagen corriendo dentro del Pod.</span></div>
+    </div>
+    <p style="text-align:center; color: var(--text-dim); font-size: 0.85rem; max-width: 640px; margin: 14px auto 0;">Un <strong>Service</strong> no forma parte de esta jerarquía — es el "enrutador" que encuentra Pods por <em>label selector</em> y les da una IP/DNS estable, aunque los Pods mueran y renazcan con otra IP.</p>
+  </section>
+
+  <!-- ================= SUBMÓDULO 1: Deploy ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Deploy applications to Azure Kubernetes Service</h2>
+        <p class="desc">Escribir el manifiesto, exponerlo con un Service, aplicarlo al cluster y verificar que arrancó bien.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card wide">
+        <h3><span class="dot"></span>Anatomía de un Deployment manifest</h3>
+        <p>Un YAML declara el estado deseado: qué imagen correr, cuántas copias, cuánta CPU/memoria, y qué variables de entorno necesita.</p>
+        <span class="cmd-block">apiVersion: apps/v1
+kind: Deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: inference-api }
+  template:
+    metadata:
+      labels: { app: inference-api }
+    spec:
+      containers:
+      - name: api
+        image: myregistry.azurecr.io/inference-api:v1.0
+        ports: [{ containerPort: 8080 }]
+        resources:
+          requests: { memory: "2Gi", cpu: "1000m" }
+          limits:   { memory: "4Gi", cpu: "2000m" }</span>
+        <p><strong>requests</strong> = lo que el Pod necesita para arrancar (Kubernetes lo usa para decidir en qué nodo agendarlo — si no alcanza, el Pod queda <code>Pending</code>). <strong>limits</strong> = el techo: pasarse de memoria mata y reinicia el Pod (OOMKill); pasarse de CPU solo lo <em>throttlea</em>, no lo mata.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>¿Cuántas réplicas?</h3>
+        <ul>
+          <li><strong>2</strong> — resiliencia básica, bien para dev.</li>
+          <li><strong>3</strong> — recomendado para APIs de producción con usuarios externos.</li>
+          <li><strong>4+</strong> — solo si el tráfico lo justifica; cada réplica extra consume recursos y cuesta.</li>
+        </ul>
+        <p>Si corrés 1 sola réplica y crashea, el servicio queda caído hasta que Kubernetes lo detecte y reinicie.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Secrets en el manifest</h3>
+        <p>Nunca hardcodear API keys en el YAML — se referencian desde un <code>Secret</code> creado aparte:</p>
+        <span class="cmd-block">env:
+- name: API_KEY
+  valueFrom:
+    secretKeyRef: { name: api-secrets, key: api-key }</span>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Exponer con un Service</h3>
+        <div class="compare3">
+          <div class="box"><h4>ClusterIP (default)</h4><p>Solo accesible dentro del cluster. Para servicios internos (ej. un vector store que consultan otros workers).</p></div>
+          <div class="box"><h4>NodePort</h4><p>Expone un puerto en cada nodo. Útil para pruebas rápidas, poco común en producción.</p></div>
+          <div class="box"><h4>LoadBalancer</h4><p>Crea un Load Balancer de Azure con IP pública. Para APIs que sirven usuarios externos.</p></div>
+        </div>
+        <p>El <strong>selector</strong> conecta el Service con los Pods por label — si las labels no matchean, el Service queda sin backend (sin <code>Endpoints</code>), y eso es el bug más común al exponer una app.</p>
+        <span class="cmd-block">spec:
+  type: LoadBalancer
+  selector: { app: inference-api }
+  ports:
+  - port: 80          # lo que usa el cliente
+    targetPort: 8080  # lo que escucha el contenedor</span>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Desplegar, verificar y diagnosticar</h3>
+        <span class="cmd-block">kubectl apply -f deployment.yaml -f service.yaml
+kubectl get pods            # READY 2/2, STATUS Running
+kubectl get svc              # EXTERNAL-IP asignada por Azure
+kubectl logs &lt;pod&gt; --since=10m</span>
+        <table class="mini">
+          <tr><th>Síntoma</th><th>Causa típica</th></tr>
+          <tr><td><code>ImagePullBackOff</code></td><td>Imagen/tag mal escrito, o el cluster no tiene permiso para pullear del registry</td></tr>
+          <tr><td><code>CrashLoopBackOff</code></td><td>La app crashea al iniciar — revisar <code>kubectl logs --previous</code></td></tr>
+          <tr><td>Pod en <code>Pending</code></td><td>No hay nodo con CPU/memoria suficiente para los <em>requests</em> pedidos</td></tr>
+          <tr><td>Service sin <code>Endpoints</code></td><td>El selector del Service no matchea las labels del Pod</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2: Configure ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Configure applications on Azure Kubernetes Service</h2>
+        <p class="desc">Externalizar configuración con ConfigMaps, proteger datos sensibles con Secrets, y dar almacenamiento que sobreviva a un restart.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>ConfigMaps</h3>
+        <p>Guardan configuración <strong>no sensible</strong> (feature flags, endpoints) fuera de la imagen — máximo 1 MiB por ConfigMap.</p>
+        <div class="compare">
+          <div class="box"><h4>Como env var</h4><p>Vía <code>configMapKeyRef</code>. Si el ConfigMap cambia, el Pod <strong>no</strong> se entera solo — necesita reiniciar.</p></div>
+          <div class="box"><h4>Como archivo montado</h4><p>Vía volumen. Kubernetes actualiza el archivo en caliente cuando el ConfigMap cambia (excepto con <code>subPath</code>).</p></div>
+        </div>
+        <p>Se puede marcar <code>immutable: true</code> para que nadie la edite por error — para cambiarla, hay que borrarla y recrearla.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Secrets</h3>
+        <p>Igual mecánica que un ConfigMap pero para datos sensibles (API keys, connection strings). Tipo <code>Opaque</code> por defecto; también existen tipos especiales para credenciales de registry (<code>dockerconfigjson</code>) y certificados TLS.</p>
+        <span class="cmd-block">kubectl create secret generic app-secrets \
+  --from-literal=API_KEY="valor-secreto"</span>
+        <p><strong>Nunca</strong> commitear un manifest de Secret con valores literales al repo — se crean directo en el cluster o vía una herramienta externa.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Integración con Azure para secretos</h3>
+        <div class="compare">
+          <div class="box"><h4>Key Vault CSI Driver</h4><p>Monta secretos de Key Vault directo como archivos en el Pod. Soporta rotación automática y auditoría detallada.</p></div>
+          <div class="box"><h4>App Configuration Provider</h4><p>Genera ConfigMaps/Secrets nativos a partir de App Configuration (que a su vez referencia Key Vault) — gestión centralizada entre varios clusters.</p></div>
+        </div>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Almacenamiento persistente</h3>
+        <p>El filesystem de un contenedor es efímero por defecto. Una <strong>PersistentVolumeClaim (PVC)</strong> pide storage con una capacidad y modo de acceso; Kubernetes la enlaza a un <strong>PersistentVolume</strong> real.</p>
+        <table class="mini">
+          <tr><th>StorageClass</th><th>Backend</th><th>Modo</th><th>Uso</th></tr>
+          <tr><td><code>managed-csi</code></td><td>Azure Disk</td><td>ReadWriteOnce</td><td>Un solo Pod — bases de datos, apps stateful</td></tr>
+          <tr><td><code>managed-csi-premium</code></td><td>Azure Disk Premium</td><td>ReadWriteOnce</td><td>Un solo Pod, baja latencia (I/O intensivo)</td></tr>
+          <tr><td><code>azurefile-csi</code></td><td>Azure Files</td><td>ReadWriteMany</td><td>Varios Pods a la vez — configs, logs compartidos</td></tr>
+          <tr><td><code>azurefile-csi-premium</code></td><td>Azure Files Premium</td><td>ReadWriteMany</td><td>Varios Pods, alto rendimiento</td></tr>
+        </table>
+        <p>Azure Disk usa <code>ReadWriteOnce</code> porque el disco se adjunta a un solo nodo; Azure Files usa <code>ReadWriteMany</code> porque es un share SMB montable desde varios nodos a la vez.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 3: Monitor ================= -->
+  <section class="submodule" id="sub3">
+    <div class="submodule-header">
+      <span class="num">3</span>
+      <div>
+        <h2>Monitor and troubleshoot applications on Azure Kubernetes Service</h2>
+        <p class="desc">Señales clave, herramientas del portal vs kubectl, y un flujo de diagnóstico para pods y Services.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Señales clave para IA</h3>
+        <ul>
+          <li>Latencia y throughput del endpoint de inferencia</li>
+          <li>Tasa de errores (HTTP 5xx, timeouts)</li>
+          <li>Reinicios de Pod y códigos de salida del contenedor</li>
+          <li>Uso de CPU/memoria vs los <em>requests/limits</em> configurados</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Portal vs <code>kubectl</code></h3>
+        <div class="compare">
+          <div class="box"><h4>Azure Portal</h4><p><strong>Live Logs</strong> (stream en el navegador), <strong>Container Insights</strong> (tendencias históricas, heatmaps), <strong>Diagnose and solve problems</strong> (diagnóstico guiado automático).</p></div>
+          <div class="box"><h4>kubectl</h4><p>Consultas puntuales y scripteables: <code>logs</code>, <code>top</code>, <code>describe</code>, <code>exec</code>. Ideal cuando ya sabés qué buscar.</p></div>
+        </div>
+        <span class="cmd-block">kubectl logs -f &lt;pod&gt; -n ai-workloads
+kubectl top pods -n ai-workloads</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Diagnosticar un Pod</h3>
+        <p><code>kubectl describe pod</code> muestra el evento que explica el estado: probes fallidas, env vars faltantes, error de pull. Para mirar por dentro sin modificar la imagen:</p>
+        <span class="cmd-block">kubectl exec -it &lt;pod&gt; -- /bin/sh
+curl http://localhost:8080/health</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Diagnosticar un Service</h3>
+        <p>Un Pod sano no sirve de nada si el Service no le manda tráfico. Revisar que el <em>selector</em> matchee las labels del Pod, y que existan <code>EndpointSlices</code>:</p>
+        <span class="cmd-block">kubectl get endpointslices -l kubernetes.io/service-name=inference-api</span>
+        <p>Para probar un endpoint antes de exponerlo con ingress/LoadBalancer:</p>
+        <span class="cmd-block">kubectl port-forward service/inference-api 8080:80
+curl http://localhost:8080/api/inference</span>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Buenas prácticas</h3>
+        <ul>
+          <li><strong>Empezar visual:</strong> portal para una vista rápida de salud antes de bajar a comandos.</li>
+          <li><strong>Labels consistentes:</strong> evita el clásico "Service sin Endpoints" por typo en el selector.</li>
+          <li><strong>Probar antes de exponer:</strong> <code>port-forward</code> internamente antes de publicar con LoadBalancer/ingress.</li>
+          <li><strong>Logs con contexto:</strong> incluir ID de correlación, versión de modelo — ayuda muchísimo a correlacionar con métricas.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pill-row" style="justify-content:center; margin-top: -20px; margin-bottom: 20px;">
+      <span class="pill">Deployment</span>
+      <span class="pill">Pod</span>
+      <span class="pill">Service</span>
+      <span class="pill">ConfigMap</span>
+      <span class="pill">Secret</span>
+      <span class="pill">PVC</span>
+      <span class="pill">StorageClass</span>
+      <span class="pill">EndpointSlice</span>
+      <span class="pill">CrashLoopBackOff</span>
+      <span class="pill">Container Insights</span>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — se irá ampliando con un módulo nuevo a medida que avance el curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>

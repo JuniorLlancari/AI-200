@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 4 — Develop AI solutions with Azure Cosmos DB for NoSQL</title>
+<style>
+  :root {
+    --bg: #0b1220; --bg-soft: #111a2e; --card: #16213b; --card-border: #22304f;
+    --text: #e8edf7; --text-dim: #9fb0cc; --azure: #3b9cf2; --azure-soft: #1c3a5e;
+    --teal: #34d1b6; --amber: #f2b33b; --amber-soft: #3a2d0f; --pink: #f2699c;
+    --radius: 14px; --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text); line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  nav.top { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none; padding: 7px 16px; border-radius: 999px;
+    font-size: 0.85rem; border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 40px; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border); }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure); border: 1px solid #2a5a8a;
+    padding: 5px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  .flow-section { margin: 10px 0 40px; }
+
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd { font-family: 'Cascadia Code', Consolas, monospace; background: var(--code-bg); color: var(--teal); padding: 2px 7px; border-radius: 6px; font-size: 0.85em; }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 10px 14px; color: var(--teal); font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem; margin: 10px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  @media (max-width: 760px) { .compare3 { grid-template-columns: 1fr; } }
+
+  .hierarchy { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .hierarchy .lvl { border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; border: 1px solid var(--card-border); }
+  .hierarchy .lvl1 { background: var(--azure-soft); margin-left: 0; }
+  .hierarchy .lvl2 { background: #1a2a44; margin-left: 20px; }
+  .hierarchy .lvl3 { background: #1f2e4a; margin-left: 40px; }
+  .hierarchy .lvl4 { background: #24334f; margin-left: 60px; }
+  .hierarchy .lvl b { color: var(--text); }
+  .hierarchy .lvl span { color: var(--text-dim); }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill { background: var(--bg-soft); border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px; }
+
+  table.mini { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.8rem; }
+  table.mini th, table.mini td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--card-border); }
+  table.mini th { color: var(--azure); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.mini td { color: var(--text-dim); }
+  table.mini tr:last-child td { border-bottom: none; }
+
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber); border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0; color: #f2d9a3; font-size: 0.84rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  .meter { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+  .meter .bar { flex: 1; height: 8px; border-radius: 999px; background: var(--bg-soft); overflow: hidden; }
+  .meter .fill { height: 100%; background: var(--teal); }
+  .meter .lbl { font-size: 0.76rem; color: var(--text-dim); width: 150px; flex-shrink: 0; }
+
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem; border-top: 1px solid var(--card-border); padding-top: 22px; }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html" class="active">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 4 de 9</span>
+    <h1>Develop AI solutions with Azure Cosmos DB for NoSQL</h1>
+    <p class="subtitle">De guardar documentos JSON a construir un buscador semántico: modelo de datos, SDK, queries, vector search híbrido, change feed y optimización de índices/RU/consistencia.</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. Queries</a>
+    <a href="#sub2">2. Vector search</a>
+    <a href="#sub3">3. Optimización</a>
+  </nav>
+
+  <section class="flow-section">
+    <div class="hierarchy" style="max-width: 720px; margin: 0 auto;">
+      <div class="lvl lvl1"><b>Account</b> <span>— endpoint único <code>https://&lt;nombre&gt;.documents.azure.com</code>, define consistencia y regiones</span></div>
+      <div class="lvl lvl2"><b>Database</b> <span>— namespace lógico; puede compartir throughput entre sus containers</span></div>
+      <div class="lvl lvl3"><b>Container</b> <span>— unidad de escalabilidad; requiere una <em>partition key</em>, schema-agnostic</span></div>
+      <div class="lvl lvl4"><b>Item</b> <span>— un documento JSON; <code>id</code> + partition key lo identifican de forma única</span></div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 1: Queries ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Build queries for Azure Cosmos DB for NoSQL</h2>
+        <p class="desc">Modelo de datos, conexión con el SDK, operaciones CRUD y consultas SQL sobre documentos.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Elegir la partition key</h3>
+        <p>La decisión de diseño más importante: debe existir en todo documento y tener <strong>alta cardinalidad</strong> (muchos valores distintos). Un <code>userId</code> suele funcionar bien; un booleano <code>isActive</code> crea una "hot partition" con solo 2 valores posibles.</p>
+        <p><strong>No se puede cambiar</strong> después de crear el container — hay que migrar los datos a uno nuevo.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Throughput: Request Units (RU/s)</h3>
+        <p>Todo consumo (leer, escribir, query) se mide en RUs — una métrica unificada de CPU/memoria/IOPS. Un point read de 1 KB cuesta ~1 RU; un write, 5-10 RUs; una query cross-partition puede costar cientos.</p>
+        <div class="compare">
+          <div class="box"><h4>Manual</h4><p>RU/s fijas que vos definís. Mínimo 400 RU/s.</p></div>
+          <div class="box"><h4>Autoscale</h4><p>Escala entre 10% y 100% del máximo configurado según demanda — ideal para tráfico de inferencia impredecible.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Conectar con el SDK</h3>
+        <p>El <code>CosmosClient</code> maneja pooling de conexiones — <strong>reusar una sola instancia</strong> (patrón singleton) en toda la app, nunca crear uno por request.</p>
+        <div class="compare">
+          <div class="box"><h4>Account key</h4><p>Secreto compartido, acceso total. Simple para dev, riesgoso en producción.</p></div>
+          <div class="box"><h4>Microsoft Entra ID (RBAC)</h4><p>Roles como <code>Cosmos DB Built-in Data Reader/Contributor</code>, vía <code>DefaultAzureCredential</code>. Recomendado en producción.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Point read vs Query</h3>
+        <p>Si conocés el <code>id</code> y la partition key, un <strong>point read</strong> (<code>read_item</code>) es lo más barato posible (~1 RU) — va directo a la partición correcta sin parsear ninguna query.</p>
+        <p>Una <strong>query</strong> con filtros es más flexible pero más cara, sobre todo si no incluye la partition key (<em>cross-partition</em>: abanica a todas las particiones).</p>
+        <span class="cmd-block">item = container.read_item(item="product-123", partition_key="electronics")</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Escribir: create / upsert / replace</h3>
+        <ul>
+          <li><strong>create_item</strong> — falla (409) si ya existe el <code>id</code>+partition key.</li>
+          <li><strong>upsert_item</strong> — crea o reemplaza sin quejarse. Común para cachear resultados de un modelo.</li>
+          <li><strong>replace_item</strong> — requiere que exista; soporta <em>concurrencia optimista</em> vía <code>_etag</code>: si alguien más modificó el documento mientras tanto, falla en vez de perder ese cambio.</li>
+        </ul>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Consultar con SQL</h3>
+        <p>Sintaxis similar a SQL pero pensada para JSON. Siempre usar <strong>queries parametrizadas</strong> (<code>@param</code>) — evita inyección y permite cachear el plan de ejecución.</p>
+        <span class="cmd-block">SELECT p.id, p.name, p.price
+FROM products p
+WHERE p.categoryId = @category AND p.price < @maxPrice</span>
+        <p>Funciones útiles: <code>CONTAINS</code>/<code>STARTSWITH</code> para texto, <code>ARRAY_CONTAINS</code> y <code>JOIN</code> para arrays, <code>COUNT/AVG/MIN/MAX</code> para agregados, y <code>SELECT VALUE</code> para devolver valores planos en vez de objetos envueltos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2: Vector search ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Implement vector search on Azure Cosmos DB for NoSQL</h2>
+        <p class="desc">Guardar embeddings junto a los datos de negocio (sin base vectorial aparte), buscar por similitud y mantenerlos sincronizados.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Vector policy (inmutable)</h3>
+        <p>Se define <strong>al crear el container</strong>, y ya no se puede cambiar: <code>path</code> del embedding, <code>dimensions</code> (debe matchear tu modelo, ej. 1536 para <code>text-embedding-ada-002</code>), <code>dataType</code> y <code>distanceFunction</code>.</p>
+        <span class="cmd-block">{"path": "/embedding", "dataType": "float32",
+ "distanceFunction": "cosine", "dimensions": 1536}</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Función de distancia</h3>
+        <div class="compare3">
+          <div class="box"><h4>Cosine</h4><p>Ángulo entre vectores. Ideal para embeddings de texto (Azure OpenAI). Rango -1 a +1.</p></div>
+          <div class="box"><h4>Dot product</h4><p>Igual que cosine si los vectores están normalizados, pero un poco más rápido de calcular.</p></div>
+          <div class="box"><h4>Euclidean</h4><p>Distancia en línea recta. Menos común para texto.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Tipos de índice vectorial</h3>
+        <table class="mini">
+          <tr><th>Tipo</th><th>Cuándo</th></tr>
+          <tr><td><code>flat</code></td><td>Datasets chicos, 100% recall, máx. 505 dimensiones</td></tr>
+          <tr><td><code>quantizedFlat</code></td><td>~1.000-50.000 vectores por partición, comprime para ganar velocidad</td></tr>
+          <tr><td><code>diskANN</code></td><td>Datasets grandes (millones), aproximado pero muy rápido</td></tr>
+        </table>
+        <p><code>quantizedFlat</code> y <code>diskANN</code> necesitan al menos 1.000 vectores para ser efectivos — con menos, cae a full scan.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Buscar por similitud</h3>
+        <span class="cmd-block">SELECT TOP 10 c.id, c.title,
+  VectorDistance(c.embedding, @queryVector) AS Score
+FROM c
+ORDER BY VectorDistance(c.embedding, @queryVector)</span>
+        <p>Siempre con <code>TOP N</code> — sin límite, intenta comparar contra todo el container. Para RAG, 5-10 resultados alcanza; más contexto no siempre mejora la respuesta del LLM y sube el costo en tokens.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Filtrar + búsqueda híbrida</h3>
+        <p>Combinar <code>WHERE</code> con <code>VectorDistance</code> filtra por categoría/fecha/permisos antes de rankear. Cuando hace falta también <em>match exacto</em> (ej. un código de error), <strong>Reciprocal Rank Fusion (RRF)</strong> combina similitud semántica + full-text score:</p>
+        <span class="cmd-block">ORDER BY RANK RRF(
+  VectorDistance(c.embedding, @queryVector),
+  FullTextScore(c.content, @term))</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Change feed: embeddings siempre al día</h3>
+        <p>El <strong>change feed</strong> es un log ordenado de inserts/updates. Con un trigger de Azure Functions, cada vez que un documento cambia, se regenera su embedding automáticamente — sin polling manual.</p>
+        <p>Requiere un <em>lease container</em> aparte para llevar el checkpoint de qué ya se procesó (y repartir particiones entre varias instancias). La lógica debe ser <strong>idempotente</strong>: reprocesar el mismo cambio dos veces no debería romper nada.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 3: Optimización ================= -->
+  <section class="submodule" id="sub3">
+    <div class="submodule-header">
+      <span class="num">3</span>
+      <div>
+        <h2>Optimize query performance for Azure Cosmos DB for NoSQL</h2>
+        <p class="desc">Índices a medida, menos RUs por query, y el nivel de consistencia correcto para cada caso.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Por defecto, indexa todo</h3>
+        <p>Cada container nuevo indexa automáticamente <strong>todas</strong> las propiedades con range indexes — cómodo al empezar, pero cuesta storage y RUs de escritura de más si tenés campos grandes que nunca filtrás (como el <code>content</code> completo o el propio <code>embedding</code>).</p>
+        <p><strong>Importante:</strong> la partition key no se indexa sola si excluís todo por defecto — hay que incluirla a mano si filtrás por ella.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Indexado selectivo</h3>
+        <span class="cmd-block">{
+ "includedPaths": [{"path": "/category/?"}, {"path": "/uploadDate/?"}],
+ "excludedPaths": [{"path": "/*"}]
+}</span>
+        <p>Excluí todo (<code>/*</code>) y sumá solo lo que realmente filtrás/ordenás. El <code>embedding</code> siempre debe ir excluido del range index — usa el vector index, no el normal.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Composite indexes</h3>
+        <p>Un <code>ORDER BY</code> con 2+ propiedades <strong>requiere</strong> un composite index que matchee el orden exacto. Para filtro+orden combinados, poner las igualdades primero y como máximo un filtro de rango al final:</p>
+        <span class="cmd-block">"compositeIndexes": [[
+  {"path": "/category", "order": "ascending"},
+  {"path": "/uploadDate", "order": "descending"}
+]]</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Tuple indexes para arrays</h3>
+        <p>Cuando un documento guarda chunks (ej. <code>chunks: [{position, text, tokens}]</code>) y filtrás por varias propiedades <em>del mismo elemento</em> a la vez, un tuple index indexa esa combinación en vez de cada propiedad por separado.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Write-heavy vs Read-heavy</h3>
+        <div class="compare">
+          <div class="box"><h4>Write-heavy</h4><p>Ingesta masiva, updates frecuentes → minimizar índices, cada uno suma latencia de escritura.</p></div>
+          <div class="box"><h4>Read-heavy</h4><p>Muchas búsquedas de usuarios → indexar a fondo vale la pena, el ahorro en RUs de lectura compensa.</p></div>
+        </div>
+        <p>La mayoría de apps de IA son read-heavy: se ingesta en batch, pero se consulta todo el tiempo.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Niveles de consistencia</h3>
+        <table class="mini">
+          <tr><th>Nivel</th><th>Garantía</th><th>Costo lectura</th></tr>
+          <tr><td><strong>Strong</strong></td><td>Siempre el último write confirmado</td><td>2× RU (lee 2 réplicas)</td></tr>
+          <tr><td><strong>Bounded staleness</strong></td><td>Atraso máximo de K versiones o T segundos</td><td>2× RU</td></tr>
+          <tr><td><strong>Session</strong> (default recomendado)</td><td>"Read-your-writes" dentro de tu propia sesión</td><td>1× RU</td></tr>
+          <tr><td><strong>Consistent prefix</strong></td><td>Nunca ves los writes fuera de orden</td><td>1× RU</td></tr>
+          <tr><td><strong>Eventual</strong></td><td>Sin garantías de orden ni frescura</td><td>1× RU</td></tr>
+        </table>
+        <p><strong>Session</strong> es el punto justo para la mayoría de apps: un usuario que sube un documento y lo busca al toque, lo ve — sin pagar el 2× de Strong. Para vector search puro, Eventual suele alcanzar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pill-row" style="justify-content:center; margin-top: -20px; margin-bottom: 20px;">
+      <span class="pill">Partition Key</span>
+      <span class="pill">RU/s</span>
+      <span class="pill">Point Read</span>
+      <span class="pill">_etag</span>
+      <span class="pill">Vector Policy</span>
+      <span class="pill">VectorDistance</span>
+      <span class="pill">diskANN</span>
+      <span class="pill">RRF</span>
+      <span class="pill">Change Feed</span>
+      <span class="pill">Composite Index</span>
+      <span class="pill">Session Consistency</span>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — se irá ampliando con un módulo nuevo a medida que avance el curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>

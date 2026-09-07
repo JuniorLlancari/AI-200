@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 2 — Deploy and manage apps on Azure Container Apps</title>
+<style>
+  :root {
+    --bg: #0b1220;
+    --bg-soft: #111a2e;
+    --card: #16213b;
+    --card-border: #22304f;
+    --text: #e8edf7;
+    --text-dim: #9fb0cc;
+    --azure: #3b9cf2;
+    --azure-soft: #1c3a5e;
+    --teal: #34d1b6;
+    --amber: #f2b33b;
+    --amber-soft: #3a2d0f;
+    --pink: #f2699c;
+    --violet: #a78bfa;
+    --radius: 14px;
+    --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  /* ---------- Nav ---------- */
+  nav.top {
+    display: flex; justify-content: center; gap: 8px;
+    margin-bottom: 8px; flex-wrap: wrap;
+  }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none;
+    padding: 7px 16px; border-radius: 999px; font-size: 0.85rem;
+    border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc {
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    margin: 18px 0 40px;
+  }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 0.82rem;
+    padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border);
+  }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  /* ---------- Header ---------- */
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure);
+    border: 1px solid #2a5a8a; padding: 5px 14px; border-radius: 999px;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  /* ---------- Hierarchy flow (Environment > App > Revision > Replica) ---------- */
+  .flow-section { margin: 10px 0 56px; }
+  .flow-title {
+    text-align: center; font-size: 1rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 22px; font-weight: 600;
+  }
+  .flow { display: flex; align-items: stretch; justify-content: center; gap: 0; flex-wrap: wrap; }
+  .flow-step {
+    background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius);
+    padding: 18px 20px; width: 240px; text-align: center;
+  }
+  .flow-step .icon { font-size: 1.7rem; margin-bottom: 8px; display: block; }
+  .flow-step h3 { margin: 0 0 6px; font-size: 0.98rem; color: var(--text); }
+  .flow-step p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  .flow-arrow { display: flex; align-items: center; justify-content: center; width: 48px; color: var(--text-dim); font-size: 1.5rem; }
+  @media (max-width: 900px) {
+    .flow { flex-direction: column; align-items: center; }
+    .flow-arrow { transform: rotate(90deg); width: auto; padding: 4px 0; }
+  }
+
+  /* ---------- Submodule groups ---------- */
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700;
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd { font-family: 'Cascadia Code', Consolas, monospace; background: var(--code-bg); color: var(--teal); padding: 2px 7px; border-radius: 6px; font-size: 0.85em; }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 10px 14px; color: var(--teal); font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.8rem; margin: 10px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .hierarchy { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .hierarchy .lvl { border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; border: 1px solid var(--card-border); }
+  .hierarchy .lvl1 { background: var(--azure-soft); margin-left: 0; }
+  .hierarchy .lvl2 { background: #1a2a44; margin-left: 20px; }
+  .hierarchy .lvl3 { background: #1f2e4a; margin-left: 40px; }
+  .hierarchy .lvl4 { background: #24334f; margin-left: 60px; }
+  .hierarchy .lvl b { color: var(--text); }
+  .hierarchy .lvl span { color: var(--text-dim); }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill { background: var(--bg-soft); border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px; }
+  .pill.native { border-color: #2a5a8a; color: var(--azure); }
+  .pill.community { border-color: #4a3a7a; color: var(--violet); }
+
+  .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 10px 0; }
+  .mini-tile { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 12px; }
+  .mini-tile h5 { margin: 0 0 4px; font-size: 0.82rem; color: var(--text); }
+  .mini-tile p { margin: 0; font-size: 0.74rem; color: var(--text-dim); }
+  .mini-tile .zero { display: inline-block; margin-top: 6px; font-size: 0.68rem; padding: 2px 8px; border-radius: 999px; }
+  .mini-tile .zero.yes { background: #113a2e; color: var(--teal); }
+  .mini-tile .zero.no { background: #3a2d0f; color: var(--amber); }
+
+  .stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 10px 0; }
+  .stat-tile { flex: 1; min-width: 130px; background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; text-align: center; }
+  .stat-tile .value { display: block; font-size: 1.15rem; font-weight: 700; color: var(--azure); }
+  .stat-tile .label { font-size: 0.72rem; color: var(--text-dim); }
+
+  .traffic-bar { display: flex; border-radius: 999px; overflow: hidden; height: 34px; margin: 12px 0 6px; border: 1px solid var(--card-border); }
+  .traffic-seg { display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 600; color: #06101f; }
+  .traffic-seg.v1 { background: var(--teal); }
+  .traffic-seg.v2 { background: var(--pink); }
+  .traffic-caption { text-align: center; font-size: 0.76rem; color: var(--text-dim); margin: 0; }
+
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem; border-top: 1px solid var(--card-border); padding-top: 22px; }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html" class="active">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 2 de 9</span>
+    <h1>Deploy and manage apps on Azure Container Apps</h1>
+    <p class="subtitle">De un <code>az containerapp up</code> a estrategias de canary release: cómo desplegar, operar, diagnosticar y escalar contenedores con Azure Container Apps y KEDA.</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. Deploy</a>
+    <a href="#sub2">2. Manage</a>
+    <a href="#sub3">3. Scale</a>
+  </nav>
+
+  <section class="flow-section">
+    <p class="flow-title">Jerarquía de recursos</p>
+    <div class="hierarchy" style="max-width: 720px; margin: 0 auto;">
+      <div class="lvl lvl1"><b>Environment</b> <span>— frontera lógica: networking y logging compartidos entre apps (ej. separar dev/test/prod)</span></div>
+      <div class="lvl lvl2"><b>Container App</b> <span>— el servicio en sí, apunta a una imagen y expone ingress (externo o interno)</span></div>
+      <div class="lvl lvl3"><b>Revision</b> <span>— snapshot inmutable de una configuración; cada cambio relevante crea una nueva</span></div>
+      <div class="lvl lvl4"><b>Replica</b> <span>— instancia en ejecución de una revision; las que escalan hacia arriba/abajo</span></div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 1: Deploy ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Deploy containers to Azure Container Apps</h2>
+        <p class="desc">Cómo crear el entorno, desplegar con CLI/YAML, configurar runtime y autenticación, y verificar que todo arrancó bien.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Entornos (Environments)</h3>
+        <p>Un environment agrupa una o más container apps que comparten red y observabilidad. No es solo una carpeta: define cómo se comunican internamente las apps y a dónde van los logs.</p>
+        <div class="compare">
+          <div class="box"><h4>Ingress externo</h4><p>API pública, accesible desde internet (ej. un endpoint de inferencia que llama un cliente web).</p></div>
+          <div class="box"><h4>Ingress interno</h4><p>Solo alcanzable dentro del environment — para servicios internos que no deben exponerse.</p></div>
+        </div>
+        <p><strong>Buenas prácticas:</strong> un environment por etapa (dev/test/prod) para reducir el radio de impacto de una revisión mala.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Desplegar: CLI rápido vs YAML</h3>
+        <ul>
+          <li><code>az containerapp up</code> — la vía más rápida; puede crear el environment por vos. Ideal para prototipos.</li>
+          <li><code>az containerapp create</code> — más explícito, útil cuando ya tenés el environment y querés control fino.</li>
+          <li><code>az containerapp update</code> — actualizar (ej. cambiar imagen) crea una <strong>nueva revision</strong>, nunca sobreescribe la anterior en caliente.</li>
+        </ul>
+        <p>Con <code>--yaml</code>, el archivo YAML se vuelve la <strong>única fuente de verdad</strong> (ignora otros flags) — ideal para guardar en control de versiones y revisar cambios como código.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Variables de entorno vs Secrets</h3>
+        <div class="compare">
+          <div class="box"><h4>Env vars (<code>--env-vars</code>)</h4><p>Config no sensible: log level, feature flags, URLs de dependencias. Mantiene la imagen portable entre entornos.</p></div>
+          <div class="box"><h4>Secrets (<code>az containerapp secret set</code>)</h4><p>Valores sensibles (API keys, credenciales) — se rotan sin tocar la imagen.</p></div>
+        </div>
+        <p>Para exponer un secret como variable sin revelar su valor, se referencia con el prefijo <code>secretref:</code>:</p>
+        <span class="cmd-block">--set-env-vars EMBEDDINGS_API_KEY=secretref:embeddings-api-key</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Autenticación a registries privados</h3>
+        <div class="compare">
+          <div class="box"><h4>Usuario/contraseña</h4><p>Rápido de validar, pero implica rotar credenciales manualmente.</p></div>
+          <div class="box"><h4>Managed Identity (<code>--identity system</code>)</h4><p>Sin credenciales de larga duración; requiere asignar el rol <code>AcrPull</code> sobre el registry. Preferido en producción.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Verificar el despliegue</h3>
+        <ul>
+          <li><strong>Logs de consola</strong> — errores de arranque, dependencias, crashes de la app.</li>
+          <li><strong>Logs de sistema</strong> — problemas a nivel plataforma (no de tu código).</li>
+          <li><strong>Revisions</strong> (<code>revision list</code>) — confirmar que el update generó una revision nueva y saludable.</li>
+          <li><strong>Replicas</strong> (<code>replica list</code>) — instancias corriendo; útil para detectar scale-to-zero inesperado o crash loops.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2: Manage ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Manage containers in Azure Container Apps</h2>
+        <p class="desc">Operación del día a día: actualizar imágenes sin romper nada, controlar el ciclo de vida, monitorear y diagnosticar fallos.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Actualizar imágenes de forma segura</h3>
+        <ul>
+          <li><strong>Tag</strong> (ej. <code>v2</code>) — cómodo pero mutable, puede volver a apuntar a otra imagen.</li>
+          <li><strong>Digest</strong> (<code>@sha256:...</code>) — inmutable; en producción permite probar exactamente qué build sirvió cada request.</li>
+        </ul>
+        <p>Cada revision puede estar <strong>activa</strong> o <strong>inactiva</strong>. Ante un problema, <strong>desactivar</strong> es más seguro que borrar: corta el tráfico pero conserva evidencia para investigar. Container Apps purga solas las inactivas pasadas 100 (ajustable con <code>--max-inactive-revisions</code>).</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Ciclo de vida de la app</h3>
+        <div class="compare">
+          <div class="box"><h4>Stop / Start</h4><p>Acción a nivel de toda la app — garantiza que no arranquen réplicas mientras mitigás un incidente.</p></div>
+          <div class="box"><h4>Restart</h4><p>Fuerza reinicio de réplicas para salir de un estado colgado; no reemplaza entender la causa raíz.</p></div>
+        </div>
+        <p><strong>Checklist ante una revision que falla:</strong> fallo al pull de imagen · puerto mal configurado · variable/secret faltante · probes mal apuntadas · presión de memoria/CPU.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Monitoreo y logs</h3>
+        <p><code>az containerapp logs show --follow</code> transmite logs en vivo — útil para reproducir un fallo mientras ocurre.</p>
+        <p>Para que los logs realmente ayuden a diagnosticar, conviene loguear: <strong>ID de correlación</strong>, <strong>ID de revision/build</strong>, <strong>versión de modelo</strong> y <strong>desglose de latencia</strong> — sin loguear contenido sensible (prompts o documentos completos).</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Health Probes</h3>
+        <div class="compare">
+          <div class="box"><h4>Readiness</h4><p>"¿Puede esta réplica recibir tráfico ya mismo?" — clave si tu app carga un modelo al iniciar.</p></div>
+          <div class="box"><h4>Liveness</h4><p>"¿Sigue viva/sana esta réplica?" — si falla, se reinicia. Demasiado agresiva = más cold starts.</p></div>
+        </div>
+        <p>Causas típicas de fallo: puerto o path incorrectos, timeout muy corto para el arranque, o una dependencia externa lenta/caída durante el startup.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Optimizar recursos</h3>
+        <p>Si falta <strong>CPU</strong>, la réplica se <em>throttlea</em> (más lenta, no muere). Si falta <strong>memoria</strong>, la réplica se <em>reinicia</em> (falla dura). Son señales distintas para decidir qué subir.</p>
+        <p>Fijar réplicas mínimas reduce cold starts pero sube el costo base — es un trade-off, no una regla fija.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 3: Scale ================= -->
+  <section class="submodule" id="sub3">
+    <div class="submodule-header">
+      <span class="num">3</span>
+      <div>
+        <h2>Scale containers in Azure Container Apps</h2>
+        <p class="desc">Cómo Container Apps decide cuántas réplicas correr, basado en HTTP, recursos o eventos — motorizado por KEDA.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card wide">
+        <h3><span class="dot"></span>Tipos de reglas de scaling</h3>
+        <p>Toda definición de escalado tiene 3 partes: <strong>límites</strong> (min/max réplicas), <strong>reglas</strong> (qué dispara el escalado) y <strong>comportamiento</strong> (timing). Por defecto: 0 a 10 réplicas si hay ingress. Sin ingress y sin mínimo/regla, la app puede quedar en 0 réplicas <strong>sin forma de despertar</strong>.</p>
+        <div class="mini-grid">
+          <div class="mini-tile">
+            <h5>HTTP</h5>
+            <p>Escala por requests concurrentes (umbral por réplica, default 10). Ideal para APIs síncronas.</p>
+            <span class="zero yes">Escala a 0: sí</span>
+          </div>
+          <div class="mini-tile">
+            <h5>TCP</h5>
+            <p>Escala por conexiones concurrentes. Para WebSockets, gRPC, pools de conexión a DB.</p>
+            <span class="zero yes">Escala a 0: sí</span>
+          </div>
+          <div class="mini-tile">
+            <h5>CPU / Memoria</h5>
+            <p>Escala por % de utilización. Para cargas de cómputo pesado (inferencia, transcodificación).</p>
+            <span class="zero no">Escala a 0: no</span>
+          </div>
+          <div class="mini-tile">
+            <h5>Basado en eventos (KEDA)</h5>
+            <p>Escala por profundidad de cola/lag de eventos. Para workers asíncronos.</p>
+            <span class="zero yes">Escala a 0: sí</span>
+          </div>
+        </div>
+        <p><strong>Billing:</strong> 0 réplicas = $0 de cómputo · réplica corriendo sin tráfico = tarifa "idle" (más baja) · réplica activa = tarifa completa.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Cómo decide el timing</h3>
+        <div class="stat-row">
+          <div class="stat-tile"><span class="value">15s</span><span class="label">ventana HTTP/TCP</span></div>
+          <div class="stat-tile"><span class="value">30s</span><span class="label">polling de triggers custom (CPU/eventos)</span></div>
+          <div class="stat-tile"><span class="value">300s</span><span class="label">cool-down antes de bajar a 0</span></div>
+          <div class="stat-tile"><span class="value">1→4→8→16…</span><span class="label">pasos de escalado hacia arriba</span></div>
+        </div>
+        <p>Si tenés picos cortos seguidos de calma, ese cool-down de 5 minutos puede mantener réplicas corriendo (y cobrando) más tiempo del esperado.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Scaling basado en eventos — nativos de Azure</h3>
+        <p>KEDA es el motor detrás del escalado por eventos. Estos scalers Azure-native tienen soporte de primera clase:</p>
+        <div class="pill-row">
+          <span class="pill native">Azure Service Bus</span>
+          <span class="pill native">Azure Storage Queue</span>
+          <span class="pill native">Azure Event Hubs</span>
+        </div>
+        <p>Ejemplo: con Service Bus, si <code>messageCount</code> = 5 y hay 50 mensajes en cola, KEDA pide 10 réplicas (50 ÷ 5).</p>
+        <span class="cmd-block">--scale-rule-type azure-servicebus
+--scale-rule-metadata queueName=orders messageCount=5</span>
+        <p>Preferí <strong>managed identity</strong> sobre connection strings guardadas como secret — menos rotación manual.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Scalers KEDA para otros workloads</h3>
+        <p>Más allá de Azure, KEDA soporta decenas de fuentes de eventos:</p>
+        <div class="pill-row">
+          <span class="pill community">Kafka (lag de consumer group)</span>
+          <span class="pill community">Redis Lists / Streams</span>
+          <span class="pill community">Cron (ventanas horarias)</span>
+          <span class="pill community">Prometheus (métricas custom)</span>
+        </div>
+        <p>Un patrón útil es combinar <strong>Cron</strong> (capacidad base en horario pico) con <strong>HTTP</strong> (para picos inesperados) — cuando hay varias reglas activas, gana la que pide más réplicas.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Recursos de cómputo y perfiles</h3>
+        <p>La memoria debe ser al menos <strong>2× la CPU</strong> en GiB (ej. 0.5 CPU → mínimo 1 GiB). Default: 0.25 CPU / 0.5 GiB por réplica.</p>
+        <div class="compare">
+          <div class="box"><h4>Consumption</h4><p>Serverless, pagás por uso, comparte infraestructura. Bueno para tráfico variable.</p></div>
+          <div class="box"><h4>Dedicated</h4><p>VMs reservadas, rendimiento consistente. Necesario para GPU o más de 4 CPU / 8 GiB.</p></div>
+        </div>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Modos de revision y tráfico</h3>
+        <div class="compare">
+          <div class="box"><h4>Single revision (default)</h4><p>Solo una revision activa a la vez. Zero-downtime automático: la nueva arranca, pasa sus checks, y recién ahí recibe el tráfico.</p></div>
+          <div class="box"><h4>Multiple revision</h4><p>Varias revisions activas a la vez — habilita canary releases, blue-green y A/B testing con reparto de tráfico manual.</p></div>
+        </div>
+        <p><strong>Ejemplo — canary release:</strong> mandar solo el 20% del tráfico a la v2 para validarla antes de un rollout completo:</p>
+        <div class="traffic-bar">
+          <div class="traffic-seg v1" style="width: 80%;">v1 · 80%</div>
+          <div class="traffic-seg v2" style="width: 20%;">v2 · 20%</div>
+        </div>
+        <p class="traffic-caption"><code>az containerapp ingress traffic set --revision-weight order-api--v1=80 order-api--v2=20</code></p>
+        <p>Las <strong>revision labels</strong> dan una URL fija que siempre apunta a una revision específica, sin importar el reparto de tráfico — útil para que testers validen la v2 antes de sumarla al canary.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — se irá ampliando con un módulo nuevo a medida que avance el curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>

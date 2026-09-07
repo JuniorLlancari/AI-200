@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 8 — Manage application secrets and configuration for AI solutions</title>
+<style>
+  :root {
+    --bg: #0b1220; --bg-soft: #111a2e; --card: #16213b; --card-border: #22304f;
+    --text: #e8edf7; --text-dim: #9fb0cc; --azure: #3b9cf2; --azure-soft: #1c3a5e;
+    --teal: #34d1b6; --amber: #f2b33b; --amber-soft: #3a2d0f; --pink: #f2699c;
+    --radius: 14px; --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text); line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  nav.top { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none; padding: 7px 16px; border-radius: 999px;
+    font-size: 0.85rem; border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 40px; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border); }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure); border: 1px solid #2a5a8a;
+    padding: 5px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd { font-family: 'Cascadia Code', Consolas, monospace; background: var(--code-bg); color: var(--teal); padding: 2px 7px; border-radius: 6px; font-size: 0.85em; }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 10px 14px; color: var(--teal); font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem; margin: 10px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  @media (max-width: 760px) { .compare3 { grid-template-columns: 1fr; } }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill { background: var(--bg-soft); border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px; }
+
+  table.mini { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.8rem; }
+  table.mini th, table.mini td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--card-border); }
+  table.mini th { color: var(--azure); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.mini td { color: var(--text-dim); }
+  table.mini tr:last-child td { border-bottom: none; }
+
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber); border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0; color: #f2d9a3; font-size: 0.84rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem; border-top: 1px solid var(--card-border); padding-top: 22px; }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html" class="active">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 8 de 9</span>
+    <h1>Manage application secrets and configuration for AI solutions</h1>
+    <p class="subtitle">Secretos con auditoría y rotación en Key Vault; configuración operativa y feature flags en App Configuration — y cómo se combinan sin duplicar nada.</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. Key Vault</a>
+    <a href="#sub2">2. App Configuration</a>
+  </nav>
+
+  <!-- ================= SUBMÓDULO 1: Key Vault ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Manage application secrets with Azure Key Vault</h2>
+        <p class="desc">Almacén centralizado con auditoría, rotación y cifrado — para todo lo que da acceso a un recurso.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Tres tipos de objeto</h3>
+        <div class="compare3">
+          <div class="box"><h4>Secrets</h4><p>Strings arbitrarios (hasta 25 KB): API keys, connection strings, tokens.</p></div>
+          <div class="box"><h4>Keys</h4><p>Claves criptográficas — la operación (firmar/cifrar) ocurre dentro del vault, la clave nunca sale.</p></div>
+          <div class="box"><h4>Certificates</h4><p>X.509 + su clave privada, con emisión/renovación integrada.</p></div>
+        </div>
+        <p>Standard tier = protección por software (FIPS 140 L1); Premium = HSM dedicado (FIPS 140-3 L3).</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Organización</h3>
+        <p>Un vault por app + entorno (<code>kv-app-dev</code>, <code>kv-app-prod</code>) acota el radio de impacto si uno se compromete. Nombres descriptivos (<code>cosmosdb-connection-string</code>) + hasta 15 tags por secret para filtrar/reportar — pero ojo, cualquiera con permiso de lectura ve los tags, no metas datos sensibles ahí.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Roles RBAC</h3>
+        <table class="mini">
+          <tr><th>Rol</th><th>Da acceso a</th></tr>
+          <tr><td>Key Vault Secrets User</td><td>Solo lectura de valores — para la managed identity de la app</td></tr>
+          <tr><td>Key Vault Secrets Officer</td><td>CRUD completo de secrets — para operadores/CI-CD</td></tr>
+          <tr><td>Key Vault Administrator</td><td>Todo el data plane (secrets+keys+certs)</td></tr>
+        </table>
+        <div class="warning">⚠️ <code>Key Vault Contributor</code> es <strong>solo control plane</strong> (gestiona el recurso vault) — no da acceso a leer secretos.</div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Recuperar con el SDK</h3>
+        <span class="cmd-block">credential = DefaultAzureCredential()
+client = SecretClient(vault_url=url, credential=credential)
+secret = client.get_secret("openai-api-key")</span>
+        <p><code>DefaultAzureCredential</code> prueba en cadena: env vars → workload identity → <strong>managed identity</strong> (producción) → Azure CLI (dev local) — mismo código en ambos entornos.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Versionado y rotación</h3>
+        <p>Cada <code>set_secret()</code> con el mismo nombre crea una <strong>versión nueva</strong>, no sobreescribe. <code>get_secret()</code> sin versión siempre trae la última — rotar es solo guardar una versión nueva y dejar que la app la vuelva a pedir.</p>
+        <div class="compare">
+          <div class="box"><h4>Automática con Event Grid</h4><p>El evento <code>SecretNearExpiry</code> dispara 30 días antes del vencimiento → una Function genera la credencial nueva y la guarda.</p></div>
+          <div class="box"><h4>Dual-credential</h4><p>Para servicios con 2 keys activas (Storage, Cosmos DB): generás la nueva, esperás que todas las instancias la usen, y recién ahí revocás la vieja — nunca hay downtime.</p></div>
+        </div>
+        <p><strong>Patrón zero-downtime en código:</strong> si falla la autenticación contra el servicio downstream, volvés a pedir el secret (trae la versión nueva) y reintentás — sin reiniciar la app.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Soft delete + Purge protection</h3>
+        <p>Soft delete viene activado siempre (7-90 días de retención) — un secret borrado se puede recuperar. <strong>Purge protection</strong> (opcional) impide el borrado permanente incluso durante ese período — clave en producción para no perder una clave de cifrado para siempre por error o ataque.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Cachear para no saturar Key Vault</h3>
+        <p>Límite: ~4.000 GETs por vault cada 10 segundos. Una app de IA sin cache puede llegar a eso fácil bajo carga. Cache en memoria con TTL corto (15-60 min) reduce eso a un puñado de llamadas por hora, y <code>SecretNewVersionCreated</code> vía Event Grid permite invalidar el cache apenas rota el secret, en vez de esperar el TTL.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2: App Configuration ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Manage application settings with Azure App Configuration</h2>
+        <p class="desc">Configuración operativa centralizada, con entornos, feature flags, y un puente transparente a Key Vault.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Modelo de datos</h3>
+        <p><strong>Key</strong> (soporta jerarquía con <code>:</code>, ej. <code>OpenAI:Endpoint</code>) + <strong>Value</strong> + <strong>Label</strong> (variante por entorno) + <strong>Content-Type</strong> (marca JSON o Key Vault reference).</p>
+        <span class="cmd-block">config = load(endpoint=endpoint, credential=DefaultAzureCredential())
+model_endpoint = config["OpenAI:Endpoint"]</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Labels: mismo key, distinto valor por entorno</h3>
+        <p>Un <code>Pipeline:BatchSize</code> con label <code>Development</code>=10 y <code>Production</code>=200 — la app siempre pide <code>Pipeline:BatchSize</code>, sin lógica condicional. Cargando primero el label nulo (default) y después el label del entorno, las settings específicas <strong>sobreescriben</strong> solo lo que tienen override, todo lo demás queda en su default.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Feature flags</h3>
+        <span class="cmd-block">if feature_manager.is_enabled("UseNewEmbeddingsModel"):
+    process_with_new_model(document)</span>
+        <p>Casos de uso reales: <strong>rollout progresivo</strong> de un modelo nuevo, <strong>kill switch</strong> para apagar un stage que empezó a fallar (segundos, no un rollback de deploy), <strong>A/B testing</strong> entre dos configuraciones.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Refresh dinámico sin reiniciar</h3>
+        <p>Con un <em>sentinel key</em> vigilado (<code>refresh_on</code>), cambiar ese key dispara que la próxima llamada a <code>config.refresh()</code> recargue toda la configuración — así los cambios se aplican en conjunto, no a medias.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Key Vault references: un solo punto de entrada</h3>
+        <p>App Configuration puede guardar una <strong>referencia</strong> (URI) a un secret en Key Vault en vez del valor — el <code>load()</code> con <code>keyvault_credential</code> resuelve todo de forma transparente, tu código no distingue de dónde vino cada valor.</p>
+        <span class="cmd-block">config = load(endpoint=endpoint, credential=cred, keyvault_credential=cred)
+api_key = config["OpenAI:ApiKey"]   # resuelto desde Key Vault sin código extra</span>
+        <p>Requiere <strong>2 role assignments</strong>: <code>App Configuration Data Reader</code> en el store + <code>Key Vault Secrets User</code> en el vault. <code>secret_refresh_interval</code> controla cada cuánto se re-resuelve el secreto, independiente del refresh de la config normal.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>¿Dónde va cada cosa?</h3>
+        <table class="mini">
+          <tr><th>Tipo de dato</th><th>Va en</th></tr>
+          <tr><td>Endpoints, nombres de deployment, batch size, timeouts</td><td>App Configuration (directo)</td></tr>
+          <tr><td>Feature flags</td><td>App Configuration (feature flag)</td></tr>
+          <tr><td>API keys, connection strings con credenciales</td><td>Key Vault (referenciado desde App Config)</td></tr>
+          <tr><td>Certificados TLS</td><td>Key Vault (directo)</td></tr>
+        </table>
+        <p><strong>Regla simple:</strong> si el valor por sí solo da acceso a algo, va a Key Vault. Si solo controla comportamiento, va a App Configuration. Anti-patrón común: guardar secretos directo en App Config "porque es más fácil" — se pierde auditoría, HSM y rotación automática.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pill-row" style="justify-content:center; margin-top: -20px; margin-bottom: 20px;">
+      <span class="pill">Secrets vs Keys vs Certs</span>
+      <span class="pill">Purge Protection</span>
+      <span class="pill">Rotación Dual-Credential</span>
+      <span class="pill">Labels</span>
+      <span class="pill">Feature Flags</span>
+      <span class="pill">Sentinel Key</span>
+      <span class="pill">Key Vault Reference</span>
+      <span class="pill">DefaultAzureCredential</span>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — se irá ampliando con un módulo nuevo a medida que avance el curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>

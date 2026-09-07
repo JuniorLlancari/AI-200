@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 1 — Implement container application hosting on Azure</title>
+<style>
+  :root {
+    --bg: #0b1220;
+    --bg-soft: #111a2e;
+    --card: #16213b;
+    --card-border: #22304f;
+    --text: #e8edf7;
+    --text-dim: #9fb0cc;
+    --azure: #3b9cf2;
+    --azure-soft: #1c3a5e;
+    --teal: #34d1b6;
+    --amber: #f2b33b;
+    --amber-soft: #3a2d0f;
+    --pink: #f2699c;
+    --radius: 14px;
+    --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  /* ---------- Nav ---------- */
+  nav.top {
+    display: flex; justify-content: center; gap: 8px;
+    margin-bottom: 8px; flex-wrap: wrap;
+  }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none;
+    padding: 7px 16px; border-radius: 999px; font-size: 0.85rem;
+    border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 40px; }
+  .toc a {
+    color: var(--text-dim); text-decoration: none; font-size: 0.82rem;
+    padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border);
+  }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  /* ---------- Header ---------- */
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block;
+    background: var(--azure-soft);
+    color: var(--azure);
+    border: 1px solid #2a5a8a;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    margin: 14px 0 6px;
+    font-weight: 700;
+  }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  /* ---------- Flow diagram ---------- */
+  .flow-section { margin: 10px 0 56px; }
+  .flow-title {
+    text-align: center; font-size: 1rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 22px; font-weight: 600;
+  }
+  .flow {
+    display: flex; align-items: stretch; justify-content: center;
+    gap: 0; flex-wrap: wrap;
+  }
+  .flow-step {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    width: 230px;
+    text-align: center;
+  }
+  .flow-step .icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+  .flow-step h3 { margin: 0 0 6px; font-size: 1rem; color: var(--text); }
+  .flow-step p { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    width: 56px; color: var(--text-dim); font-size: 1.6rem;
+  }
+  @media (max-width: 760px) {
+    .flow { flex-direction: column; align-items: center; }
+    .flow-arrow { transform: rotate(90deg); width: auto; padding: 4px 0; }
+  }
+
+  /* ---------- Submodule groups ---------- */
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700;
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 {
+    margin: 0 0 10px;
+    font-size: 1.02rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd {
+    font-family: 'Cascadia Code', Consolas, monospace;
+    background: var(--code-bg);
+    color: var(--teal);
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 0.85em;
+  }
+  .cmd-block {
+    display: block;
+    background: var(--code-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--teal);
+    font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.8rem;
+    margin: 10px 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* mini comparison table */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box {
+    background: var(--bg-soft); border: 1px solid var(--card-border);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  @media (max-width: 760px) { .compare3 { grid-template-columns: 1fr; } }
+
+  /* hierarchy nested boxes */
+  .hierarchy { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .hierarchy .lvl {
+    border-radius: 10px; padding: 10px 14px; font-size: 0.85rem;
+    border: 1px solid var(--card-border);
+  }
+  .hierarchy .lvl1 { background: var(--azure-soft); margin-left: 0; }
+  .hierarchy .lvl2 { background: #1a2a44; margin-left: 20px; }
+  .hierarchy .lvl3 { background: #1f2e4a; margin-left: 40px; }
+  .hierarchy .lvl b { color: var(--text); }
+  .hierarchy .lvl span { color: var(--text-dim); }
+
+  /* slots before/after */
+  .slots-diagram { display: flex; align-items: center; gap: 12px; margin: 12px 0; flex-wrap: wrap; }
+  .slot-box { flex: 1; min-width: 110px; text-align: center; padding: 12px 8px; border-radius: 10px; border: 1px solid var(--card-border); }
+  .slot-box.staging { background: var(--amber); color: #241a03; }
+  .slot-box.prod { background: var(--teal); color: #04241d; }
+  .slot-box b { display: block; font-size: 0.85rem; }
+  .slot-box span { font-size: 0.72rem; }
+  .swap-arrow { font-size: 1.4rem; color: var(--pink); }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill {
+    background: var(--bg-soft); border: 1px solid var(--card-border);
+    color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px;
+  }
+
+  /* mini tables inside cards */
+  table.mini { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.82rem; }
+  table.mini th, table.mini td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--card-border); }
+  table.mini th { color: var(--azure); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.mini td { color: var(--text-dim); }
+  table.mini tr:last-child td { border-bottom: none; }
+
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber);
+    border-radius: 8px; padding: 10px 14px; margin: 10px 0;
+    color: #f2d9a3; font-size: 0.84rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  footer {
+    margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem;
+    border-top: 1px solid var(--card-border); padding-top: 22px;
+  }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html" class="active">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 1 de 9</span>
+    <h1>Implement container application hosting on Azure</h1>
+    <p class="subtitle">Cómo empaquetar, guardar, versionar y correr contenedores en Azure — de tu Docker local, pasando por Azure Container Registry, hasta una Web App en producción.</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. Container Registry</a>
+    <a href="#sub2">2. App Service</a>
+  </nav>
+
+  <section class="flow-section">
+    <p class="flow-title">El panorama general</p>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="icon">🐳</span>
+        <h3>Docker local</h3>
+        <p>Construyes y validas la imagen en tu máquina antes de subir nada a la nube.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="icon">📦</span>
+        <h3>Azure Container Registry</h3>
+        <p>Guarda, versiona y (opcionalmente) reconstruye esa misma imagen en la nube.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="icon">🌐</span>
+        <h3>Azure App Service</h3>
+        <p>Descarga la imagen del registry y la corre como una Web App accesible por HTTP.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 1: ACR ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Store and manage containers in Azure Container Registry</h2>
+        <p class="desc">El "almacén" de imágenes: dónde viven, cómo se organizan, cómo se versionan y cómo se construyen en la nube.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>¿Qué es ACR?</h3>
+        <p>Un registro Docker <strong>privado y administrado</strong>. A diferencia de Docker Hub, da control directo de acceso, geo-replicación y se integra nativo con AKS, Container Apps y App Service.</p>
+        <table class="mini">
+          <tr><th>Tier</th><th>Para qué</th></tr>
+          <tr><td><strong>Basic</strong></td><td>Dev/aprendizaje — throughput y storage limitados</td></tr>
+          <tr><td><strong>Standard</strong></td><td>Más storage/throughput para producción</td></tr>
+          <tr><td><strong>Premium</strong></td><td>Geo-replicación, private endpoints, content trust</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Jerarquía: Registry → Repository → Artifact</h3>
+        <div class="hierarchy">
+          <div class="lvl lvl1"><b>Registry</b> <span>— el servidor/cuenta en sí, URL única <code>&lt;nombre&gt;.azurecr.io</code></span></div>
+          <div class="lvl lvl2"><b>Repository</b> <span>— una carpeta por nombre de imagen (ej. <code>inference-api</code>); soporta <em>namespaces</em> con "/" (ej. <code>produccion/inference-api</code>)</span></div>
+          <div class="lvl lvl3"><b>Artifact</b> <span>— una combinación imagen:tag concreta (ej. <code>inference-api:v1.0.0</code>)</span></div>
+        </div>
+        <p>Los namespaces sirven para control de acceso: un equipo puede tener permiso de push solo dentro de su propio namespace.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Tags, Layers y Manifests</h3>
+        <ul>
+          <li><strong>Layers</strong> — cada instrucción del Dockerfile crea una capa; ACR las <em>deduplica</em> entre imágenes (ej. varias imágenes basadas en <code>python:3.11</code> comparten esa capa, ahorrando storage).</li>
+          <li><strong>Manifest</strong> — lista las layers + configuración de un artifact; se identifica por un <strong>digest</strong> SHA-256 <em>inmutable</em>.</li>
+          <li><strong>Tag</strong> — referencia legible y <em>mutable</em>; un mismo artifact puede tener varios tags (ej. <code>v1.2.0</code> y <code>stable</code> apuntando a la misma imagen).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Direccionar: por tag vs por digest</h3>
+        <div class="compare">
+          <div class="box"><h4>Por tag</h4><p>Legible, cómodo en desarrollo. No garantiza reproducibilidad — el tag puede haberse movido.</p></div>
+          <div class="box"><h4>Por digest</h4><p>Inmutable — garantiza que todos los nodos corren <em>exactamente</em> la misma imagen. Clave en producción.</p></div>
+        </div>
+        <span class="cmd-block">docker pull myregistry.azurecr.io/inference-api@sha256:0a2e0185...</span>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>ACR Tasks: el "CI/CD" del registry</h3>
+        <p>Un motor de build que corre <strong>dentro de Azure</strong>: envías el código fuente (carpeta local, repo Git o tarball remoto) y ACR construye + pushea la imagen, sin necesitar Docker local.</p>
+        <div class="compare3">
+          <div class="box"><h4>Quick Task</h4><p>Ejecución única bajo demanda. Equivale a <code>docker build</code> + <code>push</code>, pero en la nube.</p></div>
+          <div class="box"><h4>Task con trigger</h4><p>Recurso persistente disparado por: <strong>commit/PR</strong> en Git, <strong>actualización de la imagen base</strong> (ej. parche de seguridad en <code>python:3.11</code>), o <strong>schedule</strong> (cron).</p></div>
+          <div class="box"><h4>Multi-step Task</h4><p>Workflow en YAML: build → push → correr tests dentro del contenedor, antes de dar la imagen por válida.</p></div>
+        </div>
+        <p>La variable <code>{{.Run.ID}}</code> genera un tag único por ejecución, para trazar qué build produjo qué imagen:</p>
+        <span class="cmd-block">az acr build --registry myregistry --image inference-api:v1.0.0 .</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Estrategias de tagging y versionado</h3>
+        <div class="compare">
+          <div class="box"><h4>Tags estables</h4><p>Ej. <code>latest</code>, <code>v1</code> — se reutilizan; cómodos, pero distintos nodos pueden terminar corriendo imágenes distintas.</p></div>
+          <div class="box"><h4>Tags únicos</h4><p>Ej. <code>v1.2.0-build456</code> — nunca se reusan; garantizan reproducibilidad y trazabilidad para auditoría.</p></div>
+        </div>
+        <p><strong>Semantic versioning</strong> (<code>MAJOR.MINOR.PATCH</code>): mayor = cambio incompatible, menor = feature nueva compatible, patch = fix. En producción, evitar <code>latest</code> — usar tags explícitos.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Bloqueo y limpieza</h3>
+        <p>Una imagen en producción se puede <strong>bloquear</strong> para que nadie la borre ni sobreescriba por accidente:</p>
+        <span class="cmd-block">az acr repository update -n myregistry -t app:v1 --write-enabled false</span>
+        <p>Cuando un tag estable se reapunta, la imagen anterior queda "huérfana" (sin tag) pero sigue ocupando espacio. <code>acr purge</code> limpia esas imágenes sin tag más viejas que X días — se puede agendar como una Task recurrente. En tier Premium existen además políticas de retención automáticas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2: App Service ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Deploy containers to Azure App Service</h2>
+        <p class="desc">Del registry a una app corriendo de verdad: cómputo, autenticación, runtime, configuración, despliegue seguro y diagnóstico.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>App Service Plan vs Web App</h3>
+        <p><strong>Plan</strong> = el "servidor" (CPU/RAM) donde corren una o más apps. El SKU define el nivel (ej. <code>B1</code> Basic, económico pero sin autoscale). Para contenedores Linux, el plan debe ser Linux.</p>
+        <p><strong>Web App</strong> = el recurso que efectivamente corre tu imagen — apunta a un <code>registry/repositorio:tag</code> concreto.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Origen de la imagen</h3>
+        <div class="compare">
+          <div class="box"><h4>Azure Container Registry</h4><p>Recomendado en producción: integra Managed Identity, geo-replicación y escaneo de imágenes.</p></div>
+          <div class="box"><h4>Otros registries</h4><p>Cualquier registry HTTPS compatible con Docker Registry API v2 (Docker Hub, GHCR, self-hosted) — requiere server URL + usuario/contraseña para imágenes privadas.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Autenticación a ACR</h3>
+        <div class="compare">
+          <div class="box"><h4>Managed Identity</h4><p><strong>System-assigned</strong> (vive y muere con la app) o <strong>user-assigned</strong> (recurso independiente, reutilizable en varias apps). Requiere rol <code>AcrPull</code> sobre el registry. Recomendado en producción.</p></div>
+          <div class="box"><h4>Admin credentials</h4><p>Usuario/contraseña del ACR (<code>az acr update --admin-enabled true</code>). Más simple para dev, pero credenciales que rotar a mano.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Desplegar y actualizar</h3>
+        <span class="cmd-block">az webapp create -g rg -p plan -n app \
+  --container-image-name myregistry.azurecr.io/app:v1</span>
+        <p>Actualizar a una versión nueva cambia solo el tag configurado — App Service reinicia y hace <code>docker pull</code> solo:</p>
+        <span class="cmd-block">az webapp config container set -g rg -n app \
+  --container-image-name myregistry.azurecr.io/app:v2</span>
+        <p><strong>Ojo:</strong> si reusás el mismo tag (ej. <code>latest</code>), App Service <em>no detecta el cambio solo</em> — hay que reiniciar manualmente o activar <strong>Continuous Deployment</strong> (<code>--enable-cd true</code>), que crea un webhook disparado cuando ACR publica una imagen nueva.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Runtime: comando de inicio y puerto</h3>
+        <p>Se puede sobreescribir el <code>CMD</code> del Dockerfile con un comando de arranque custom (ej. para correr migraciones antes de levantar la app):</p>
+        <span class="cmd-block">az webapp config set -g rg -n app \
+  --startup-file "gunicorn --bind=0.0.0.0:8000 app:app"</span>
+        <p>Si el contenedor no escucha en el puerto 80/8080, hay que decirle a App Service a dónde mandar el tráfico con <code>WEBSITES_PORT</code>:</p>
+        <table class="mini">
+          <tr><th>Framework</th><th>Puerto típico</th></tr>
+          <tr><td>Node.js (Express)</td><td><code>WEBSITES_PORT=3000</code></td></tr>
+          <tr><td>Python (Gunicorn)</td><td><code>WEBSITES_PORT=8000</code></td></tr>
+          <tr><td>Java (Spring Boot)</td><td><code>WEBSITES_PORT=8080</code></td></tr>
+          <tr><td>ASP.NET Core</td><td>Sin cambios (usa 80)</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Almacenamiento persistente</h3>
+        <p>Por defecto, escribir en el filesystem del contenedor es <strong>efímero</strong> — se pierde en cada restart. Activando <code>WEBSITES_ENABLE_APP_SERVICE_STORAGE=true</code>, el path <code>/home</code> persiste entre restarts y se comparte entre todas las instancias si la app escala horizontalmente.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Always-on y Health Checks</h3>
+        <p>Sin <strong>always-on</strong>, la app se descarga de memoria tras ~20 min sin requests — el próximo request sufre un <em>cold start</em>. Requiere tier Basic (B1) o superior.</p>
+        <p><strong>healthCheckPath</strong> — App Service pega esa ruta cada minuto; tras varios fallos seguidos (10 por defecto) saca la instancia del balanceo. Tu endpoint debería devolver 200 solo si la app está realmente lista para servir tráfico.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>App settings, connection strings y Key Vault</h3>
+        <p><strong>App settings</strong> se inyectan como variables de entorno normales, encriptadas en reposo. Para bases de datos, las <strong>connection strings</strong> llevan un prefijo especial según el motor:</p>
+        <table class="mini">
+          <tr><th>Tipo</th><th>Prefijo de env var</th></tr>
+          <tr><td>SQL Azure</td><td><code>SQLAZURECONNSTR_</code></td></tr>
+          <tr><td>MySQL</td><td><code>MYSQLCONNSTR_</code></td></tr>
+          <tr><td>PostgreSQL</td><td><code>POSTGRESQLCONNSTR_</code></td></tr>
+          <tr><td>Custom</td><td><code>CUSTOMCONNSTR_</code></td></tr>
+        </table>
+        <p>Para secretos con rotación/auditoría, un app setting puede ser una <strong>referencia a Key Vault</strong> (<code>@Microsoft.KeyVault(SecretUri=...)</code>) — la app sigue leyendo una variable de entorno normal, sin saber que vino de Key Vault.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Slot settings</h3>
+        <p><strong>App settings</strong> normales viajan con el código al hacer swap. Los marcados como <strong>slot settings</strong> quedan "pegados" al slot (ej. <code>ENVIRONMENT=staging</code>) y no se mueven — así staging no termina creyendo que es producción tras un swap.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Deployment Slots + Swap</h3>
+        <p>Un <strong>slot</strong> es una copia "hermana" de la Web App con su propio hostname — permite probar una versión nueva sin tocar producción. Requiere plan Standard (S1) o superior.</p>
+        <div class="slots-diagram">
+          <div class="slot-box staging"><b>staging</b><span>versión nueva a validar</span></div>
+          <div class="swap-arrow">⇄</div>
+          <div class="slot-box prod"><b>production</b><span>lo que ven los usuarios</span></div>
+        </div>
+        <p>El <strong>swap</strong> intercambia staging ↔ production sin downtime: si algo sale mal, se puede revertir con otro swap.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Observabilidad y diagnóstico</h3>
+        <ul>
+          <li><strong>Container logs</strong> (stdout/stderr) — activar con <code>--docker-container-logging filesystem</code>, se guardan en <code>/home/LogFiles/</code>.</li>
+          <li><strong>Log stream</strong> (<code>az webapp log tail</code>) — logs en vivo de todas las instancias, cada línea identifica de cuál viene.</li>
+          <li><strong>Kudu / SCM</strong> (<code>https://&lt;app&gt;.scm.azurewebsites.net</code>) — consola de diagnóstico: variables de entorno resueltas (<code>/Env</code>), explorador de archivos de <code>/home</code>, descarga de un ZIP de diagnóstico.</li>
+          <li><strong>SSH</strong> — inspección interactiva dentro del contenedor, si la imagen trae <code>openssh-server</code> configurado en el puerto 2222.</li>
+          <li><strong>Azure Monitor / Log Analytics</strong> — para retención larga y consultas KQL sobre logs históricos.</li>
+        </ul>
+        <span class="cmd-block">AppServiceConsoleLogs
+| where Level == "Error"
+| where TimeGenerated > ago(1h)</span>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Problemas comunes</h3>
+        <table class="mini">
+          <tr><th>Síntoma</th><th>Causa típica</th></tr>
+          <tr><td>El contenedor no arranca</td><td>Falta una variable/secret requerida, o la imagen/credenciales del registry están mal</td></tr>
+          <tr><td>404 en todas las rutas</td><td><code>WEBSITES_PORT</code> no coincide con el puerto real, o la app escucha en <code>localhost</code> en vez de <code>0.0.0.0</code></td></tr>
+          <tr><td>Variables "undefined"</td><td>El app setting no se guardó, tiene un typo, o la app las lee antes de que App Service las inyecte</td></tr>
+          <tr><td>Cold start lento</td><td>Imagen muy pesada o <code>always-on</code> desactivado</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pill-row" style="justify-content:center; margin-top: -20px; margin-bottom: 20px;">
+      <span class="pill">Registry</span>
+      <span class="pill">Repository</span>
+      <span class="pill">Artifact</span>
+      <span class="pill">Digest</span>
+      <span class="pill">ACR Task</span>
+      <span class="pill">Quick Task</span>
+      <span class="pill">Managed Identity</span>
+      <span class="pill">AcrPull</span>
+      <span class="pill">WEBSITES_PORT</span>
+      <span class="pill">Health Check</span>
+      <span class="pill">Deployment Slot</span>
+      <span class="pill">Swap</span>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — se irá ampliando con un módulo nuevo a medida que avance el curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>

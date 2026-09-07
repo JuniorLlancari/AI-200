@@ -21,6 +21,10 @@ az acr create -n acrlab002 -g rg-ai200-lab --sku Basic
 # Build inicial para tener al menos un repositorio con una imagen
 az acr build -r acrlab002 -t inference-api:v1.0.0 .
 
+# -f : path al Dockerfile (relativo al contexto de build)
+# backend : contexto de build (donde se copian los archivos al contenedor)
+# az acr build -r "$ACR_NAME" -t authbackfront-api:v1 -f backend/src/AuthBackFront.Api/Dockerfile  backend
+
 # Explorar la jerarquía: registry -> repository -> artifact (imagen/tag)
 # Lista los repositories que existen dentro del registry (un nombre por cada imagen distinta).
 az acr repository list -n acrlab002 -o table

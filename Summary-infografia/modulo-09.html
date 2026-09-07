@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 9 — Observe and troubleshoot apps on Azure</title>
+<style>
+  :root {
+    --bg: #0b1220; --bg-soft: #111a2e; --card: #16213b; --card-border: #22304f;
+    --text: #e8edf7; --text-dim: #9fb0cc; --azure: #3b9cf2; --azure-soft: #1c3a5e;
+    --teal: #34d1b6; --amber: #f2b33b; --amber-soft: #3a2d0f; --pink: #f2699c;
+    --radius: 14px; --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text); line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  nav.top { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none; padding: 7px 16px; border-radius: 999px;
+    font-size: 0.85rem; border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 40px; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border); }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure); border: 1px solid #2a5a8a;
+    padding: 5px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd { font-family: 'Cascadia Code', Consolas, monospace; background: var(--code-bg); color: var(--teal); padding: 2px 7px; border-radius: 6px; font-size: 0.85em; }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 10px 14px; color: var(--teal); font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem; margin: 10px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  @media (max-width: 760px) { .compare3 { grid-template-columns: 1fr; } }
+
+  .hierarchy { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .hierarchy .lvl { border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; border: 1px solid var(--card-border); }
+  .hierarchy .lvl1 { background: var(--azure-soft); margin-left: 0; }
+  .hierarchy .lvl2 { background: #1a2a44; margin-left: 20px; }
+  .hierarchy .lvl3 { background: #1f2e4a; margin-left: 40px; }
+  .hierarchy .lvl b { color: var(--text); }
+  .hierarchy .lvl span { color: var(--text-dim); }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill { background: var(--bg-soft); border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px; }
+
+  table.mini { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.8rem; }
+  table.mini th, table.mini td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--card-border); }
+  table.mini th { color: var(--azure); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.mini td { color: var(--text-dim); }
+  table.mini tr:last-child td { border-bottom: none; }
+
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber); border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0; color: #f2d9a3; font-size: 0.84rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem; border-top: 1px solid var(--card-border); padding-top: 22px; }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html" class="active">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 9 de 9</span>
+    <h1>Observe and troubleshoot apps on Azure</h1>
+    <p class="subtitle">Instrumentar con OpenTelemetry para ver el recorrido completo de un request, y usar KQL/Application Insights para encontrar la causa raíz cuando algo anda mal.</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. OpenTelemetry</a>
+    <a href="#sub2">2. KQL y Application Insights</a>
+  </nav>
+
+  <!-- ================= SUBMÓDULO 1: OpenTelemetry ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Instrument an app with OpenTelemetry</h2>
+        <p class="desc">Estándar abierto para capturar qué hizo un request en cada servicio por el que pasó.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Los 3 pilares de observabilidad</h3>
+        <ul>
+          <li><strong>Traces</strong> — el camino completo de un request a través de varios servicios.</li>
+          <li><strong>Metrics</strong> — números agregados en el tiempo (requests/s, tasa de error).</li>
+          <li><strong>Logs</strong> — eventos puntuales con detalle granular.</li>
+        </ul>
+        <p>Metrics te dice <em>que</em> algo cambió, traces te dice <em>dónde</em>, logs te dice <em>por qué</em>.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>OpenTelemetry: vendor-neutral</h3>
+        <p>Estándar de la CNCF — instrumentás una vez con las APIs de OpenTelemetry y exportás a cualquier backend compatible (Application Insights, Jaeger, Prometheus...) sin cambiar código. El <strong>Azure Monitor OpenTelemetry Distro</strong> empaqueta SDK + exporter + librerías de auto-instrumentación en un solo paquete.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Trace y Span</h3>
+        <div class="hierarchy">
+          <div class="lvl lvl1"><b>Trace</b> <span>— el recorrido completo de un request (Trace ID único compartido)</span></div>
+          <div class="lvl lvl2"><b>Span</b> <span>— una operación puntual (HTTP call, query) con su propio Span ID + parent</span></div>
+          <div class="lvl lvl3"><b>Atributos</b> <span>— pares clave-valor con contexto (ej. <code>embedding.model</code>)</span></div>
+        </div>
+        <p>La propagación entre servicios usa el header estándar <code>traceparent</code> (W3C) — así todos los spans de todos los servicios quedan bajo el mismo Trace ID.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Términos: OTel ↔ Application Insights</h3>
+        <table class="mini">
+          <tr><th>OpenTelemetry</th><th>Application Insights</th></tr>
+          <tr><td>Span (SERVER/CONSUMER)</td><td>Request</td></tr>
+          <tr><td>Span (CLIENT/INTERNAL/PRODUCER)</td><td>Dependency</td></tr>
+          <tr><td>Trace ID</td><td>Operation ID</td></tr>
+          <tr><td>Span Attributes</td><td>customDimensions</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Setup mínimo</h3>
+        <span class="cmd-block">from azure.monitor.opentelemetry import configure_azure_monitor
+configure_azure_monitor()   # lee APPLICATIONINSIGHTS_CONNECTION_STRING</span>
+        <p>Auto-instrumenta <code>requests</code>, Flask/Django/FastAPI, <code>psycopg2</code>, SDKs de Azure — sin escribir código extra. Cada servicio necesita su propio <code>service.name</code> (+ <code>service.namespace</code>) para aparecer como un nodo distinto en el <strong>Application Map</strong>; si no, todos se ven como uno solo.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Spans custom para lógica de negocio</h3>
+        <p>La auto-instrumentación no ve tu lógica propia (generar un embedding, ensamblar un prompt). Para eso, spans manuales anidados:</p>
+        <span class="cmd-block">tracer = trace.get_tracer("llm-orchestrator")
+with tracer.start_as_current_span("GenerateEmbedding") as span:
+    span.set_attribute("embedding.model", "text-embedding-ada-002")
+    embedding = generate_embedding(text)</span>
+        <p>Anidar <code>with</code> blocks crea la jerarquía padre-hijo automáticamente — sin pasar referencias a mano. <code>SpanKind</code> (SERVER/CLIENT/INTERNAL/PRODUCER/CONSUMER) determina si el span termina en la tabla <code>requests</code> o <code>dependencies</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2: KQL ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Analyze app telemetry with logs and metrics</h2>
+        <p class="desc">De la telemetría cruda a encontrar la causa raíz: KQL, vistas de Application Insights, dashboards y alertas.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Tablas clave</h3>
+        <table class="mini">
+          <tr><th>Tabla</th><th>Guarda</th></tr>
+          <tr><td><code>requests</code></td><td>Spans de servidor (requests entrantes)</td></tr>
+          <tr><td><code>dependencies</code></td><td>Llamadas salientes (DB, HTTP, Azure SDK)</td></tr>
+          <tr><td><code>exceptions</code></td><td>Errores con stack trace</td></tr>
+          <tr><td><code>traces</code></td><td>Logs de la app (<code>logging</code>, ILogger, etc.)</td></tr>
+        </table>
+        <p><code>operation_Id</code> (= Trace ID) enlaza todo lo que pertenece al mismo request distribuido; <code>cloud_RoleName</code> identifica el servicio.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>KQL: modelo pipe</h3>
+        <span class="cmd-block">requests
+| where timestamp > ago(1h) and success == false
+| project timestamp, name, resultCode, duration
+| top 20 by duration desc</span>
+        <p><code>has</code> (indexado, rápido) vs <code>contains</code> (substring, más lento) para buscar texto.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Agregar sin engañarse</h3>
+        <span class="cmd-block">requests
+| summarize count(), avg(duration), percentile(duration, 95)
+    by bin(timestamp, 1h), cloud_RoleName</span>
+        <p><code>percentile()</code> revela outliers que un promedio esconde. Con sampling activo, usar <code>sum(itemCount)</code> en vez de <code>count()</code> — si no, subestimás el volumen real de eventos.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Correlacionar fallas entre servicios</h3>
+        <span class="cmd-block">exceptions
+| join kind=inner (requests | project operation_Id, requestName=name) on operation_Id</span>
+        <p>El <code>join</code> por <code>operation_Id</code> conecta una excepción con el request completo que la disparó, cruzando servicios.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Patrones de fallo típicos de IA</h3>
+        <ul>
+          <li><strong>Timeout de embeddings</strong> — spans de dependency con duración fuera de rango o status de error.</li>
+          <li><strong>Cold start de vector search</strong> — alta variabilidad justo después de un período sin actividad.</li>
+          <li><strong>Rate limiting del LLM</strong> — HTTP 429 en el span de la llamada al modelo; correlacionar con <code>llm.prompt_tokens</code>.</li>
+        </ul>
+        <p>El <strong>Application Map</strong> señala visualmente qué nodo tiene más latencia/errores; la vista de <strong>end-to-end transaction</strong> muestra el waterfall completo de un trace puntual.</p>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Dashboards, Workbooks y Alertas — no son lo mismo</h3>
+        <div class="compare3">
+          <div class="box"><h4>Dashboards</h4><p>Vista estática, "¿está sano el sistema ahora?" — para monitoreo continuo en una pantalla.</p></div>
+          <div class="box"><h4>Workbooks</h4><p>Exploración interactiva con parámetros (rango de tiempo, servicio) — para investigar un incidente.</p></div>
+          <div class="box"><h4>Alertas</h4><p>Proactivas: log search alert (KQL + umbral) o <strong>smart detection</strong> (ML, detecta anomalías sin threshold manual).</p></div>
+        </div>
+        <p>Un alert rule = scope + condición + action group + severidad (0=Critical a 4=Verbose). Preferir <strong>percentiles</strong> sobre promedios como condición — un promedio sano puede esconder que el 5% de usuarios sufre latencia alta.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pill-row" style="justify-content:center; margin-top: -20px; margin-bottom: 20px;">
+      <span class="pill">Trace / Span</span>
+      <span class="pill">traceparent</span>
+      <span class="pill">cloud_RoleName</span>
+      <span class="pill">operation_Id</span>
+      <span class="pill">customDimensions</span>
+      <span class="pill">percentile()</span>
+      <span class="pill">Application Map</span>
+      <span class="pill">Smart Detection</span>
+      <span class="pill">Log Search Alert</span>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — completa los 9 módulos del curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>

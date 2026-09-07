@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 6 — Enhance AI solutions with Azure Managed Redis</title>
+<style>
+  :root {
+    --bg: #0b1220; --bg-soft: #111a2e; --card: #16213b; --card-border: #22304f;
+    --text: #e8edf7; --text-dim: #9fb0cc; --azure: #3b9cf2; --azure-soft: #1c3a5e;
+    --teal: #34d1b6; --amber: #f2b33b; --amber-soft: #3a2d0f; --pink: #f2699c;
+    --radius: 14px; --code-bg: #0d1526;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16213b 0%, var(--bg) 55%);
+    color: var(--text); line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  nav.top { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  nav.top a {
+    color: var(--text-dim); text-decoration: none; padding: 7px 16px; border-radius: 999px;
+    font-size: 0.85rem; border: 1px solid var(--card-border); background: var(--card);
+  }
+  nav.top a.active { color: var(--azure); border-color: #2a5a8a; background: var(--azure-soft); }
+  nav.top a:hover { color: var(--text); }
+
+  .toc { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 40px; }
+  .toc a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; padding: 6px 14px; border-radius: 999px; border: 1px dashed var(--card-border); }
+  .toc a:hover { color: var(--azure); border-color: var(--azure); }
+
+  header.hero { text-align: center; padding: 8px 16px 30px; }
+  .badge {
+    display: inline-block; background: var(--azure-soft); color: var(--azure); border: 1px solid #2a5a8a;
+    padding: 5px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin: 14px 0 6px; font-weight: 700; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin: 0 auto; max-width: 720px; }
+  .course-tag { color: var(--text-dim); font-size: 0.85rem; margin-top: 10px; }
+  .course-tag a { color: var(--azure); text-decoration: none; }
+  .course-tag a:hover { text-decoration: underline; }
+
+  .submodule { margin-bottom: 54px; scroll-margin-top: 20px; }
+  .submodule-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--card-border); padding-bottom: 14px;
+  }
+  .submodule-header .num {
+    background: var(--azure); color: #06101f; font-weight: 700; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;
+  }
+  .submodule-header h2 { margin: 0; font-size: 1.35rem; }
+  .submodule-header .desc { margin: 2px 0 0; color: var(--text-dim); font-size: 0.9rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px 22px; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 10px; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--azure); flex-shrink: 0; }
+  .card p { margin: 0 0 10px; color: var(--text-dim); font-size: 0.92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { margin: 0 0 10px; padding-left: 18px; color: var(--text-dim); font-size: 0.92rem; }
+  .card li { margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  code, .cmd { font-family: 'Cascadia Code', Consolas, monospace; background: var(--code-bg); color: var(--teal); padding: 2px 7px; border-radius: 6px; font-size: 0.85em; }
+  .cmd-block {
+    display: block; background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 8px;
+    padding: 10px 14px; color: var(--teal); font-family: 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem; margin: 10px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .compare .box { background: var(--bg-soft); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 14px; }
+  .compare .box h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--azure); }
+  .compare .box p { margin: 0; font-size: 0.82rem; color: var(--text-dim); }
+  @media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+
+  .compare3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  @media (max-width: 760px) { .compare3 { grid-template-columns: 1fr; } }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill { background: var(--bg-soft); border: 1px solid var(--card-border); color: var(--text-dim); font-size: 0.78rem; padding: 5px 12px; border-radius: 999px; }
+
+  table.mini { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.8rem; }
+  table.mini th, table.mini td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--card-border); }
+  table.mini th { color: var(--azure); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  table.mini td { color: var(--text-dim); }
+  table.mini tr:last-child td { border-bottom: none; }
+
+  .warning {
+    background: var(--amber-soft); border-left: 3px solid var(--amber); border-radius: 8px;
+    padding: 10px 14px; margin: 10px 0; color: #f2d9a3; font-size: 0.84rem;
+  }
+  .warning code { background: #1f1706; color: var(--amber); }
+
+  footer { margin-top: 60px; text-align: center; color: var(--text-dim); font-size: 0.82rem; border-top: 1px solid var(--card-border); padding-top: 22px; }
+  footer a { color: var(--azure); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="top">
+    <a href="index.html">Inicio</a>
+    <a href="modulo-01.html">Módulo 1</a>
+    <a href="modulo-02.html">Módulo 2</a>
+    <a href="modulo-03.html">Módulo 3</a>
+    <a href="modulo-04.html">Módulo 4</a>
+    <a href="modulo-05.html">Módulo 5</a>
+    <a href="modulo-06.html" class="active">Módulo 6</a>
+    <a href="modulo-07.html">Módulo 7</a>
+    <a href="modulo-08.html">Módulo 8</a>
+    <a href="modulo-09.html">Módulo 9</a>
+    <a href="comandos.html">Comandos</a>
+  </nav>
+
+  <header class="hero">
+    <span class="badge">AI-200T00 · Módulo 6 de 9</span>
+    <h1>Enhance AI solutions with Azure Managed Redis</h1>
+    <p class="subtitle">Redis como cache, como cola de mensajes y como base vectorial — tres roles distintos que resuelven problemas distintos en una app de IA.</p>
+    <p class="course-tag">Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">Develop AI cloud solutions on Azure</a></p>
+  </header>
+
+  <nav class="toc">
+    <a href="#sub1">1. Data ops</a>
+    <a href="#sub2">2. Mensajería</a>
+    <a href="#sub3">3. Vector storage</a>
+  </nav>
+
+  <!-- ================= SUBMÓDULO 1 ================= -->
+  <section class="submodule" id="sub1">
+    <div class="submodule-header">
+      <span class="num">1</span>
+      <div>
+        <h2>Implement data operations in Azure Managed Redis</h2>
+        <p class="desc">Redis como cache: patrones de uso, tipos de dato, expiración e invalidación.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Tres patrones de cache clásicos</h3>
+        <ul>
+          <li><strong>Data cache</strong> (cache-aside) — se carga solo lo que se pide; si no está en cache (miss), se busca en la DB y se guarda para la próxima.</li>
+          <li><strong>Content cache</strong> — fragmentos de UI que casi no cambian (headers, menús), acceso sub-milisegundo.</li>
+          <li><strong>Session store</strong> — la cookie solo guarda un ID; los datos de sesión completos viven en Redis, no en la cookie (que viaja en cada request).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Elegir el tier</h3>
+        <table class="mini">
+          <tr><th>Tier</th><th>Ratio memoria:vCPU</th></tr>
+          <tr><td>Memory Optimized</td><td>8:1 — dev/test, cargas livianas de cómputo</td></tr>
+          <tr><td>Balanced</td><td>4:1 — la mayoría de workloads</td></tr>
+          <tr><td>Compute Optimized</td><td>2:1 — máximo throughput</td></tr>
+          <tr><td>Flash Optimized (preview)</td><td>Mueve datos fríos a NVMe — datasets grandes más baratos</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Conectar</h3>
+        <div class="warning">⚠️ Puerto <code>10000</code> en Azure Managed Redis — distinto del <code>6380</code> de Azure Cache for Redis "clásico".</div>
+        <span class="cmd-block">r = redis.Redis(host=host, port=10000, ssl=True,
+                 decode_responses=True, password=key)</span>
+        <p>En producción, preferir <strong>Microsoft Entra ID</strong> (paquete <code>redis-entraid</code>) sobre password estático.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Tipos de dato básicos</h3>
+        <ul>
+          <li><strong>String</strong> — <code>SET/GET</code>, texto o binario.</li>
+          <li><strong>Hash</strong> — campos dentro de una key (ej. perfil de usuario); más eficiente en memoria que keys separadas.</li>
+          <li><strong>List</strong> — colección ordenada, para colas/feeds (<code>LPUSH/RPOP</code>).</li>
+          <li><strong>Contadores atómicos</strong> — <code>INCR/DECR</code>, sin condiciones de carrera; ideal para rate limiting.</li>
+        </ul>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>Expiración e invalidación</h3>
+        <span class="cmd-block">r.setex('session:abc123', 60, 'user_data')   # valor + TTL en un solo paso
+r.expire('user:1002:preferences', 3600)      # TTL sobre una key existente</span>
+        <p><strong>TTL == -1</strong>: existe pero sin expiración. <strong>TTL == -2</strong>: no existe. Elegir el TTL según qué tan rápido cambia el dato: 1-5 min (muy volátil) hasta 24h+ (referencia estática).</p>
+        <div class="warning">⚠️ Nunca usar <code>KEYS</code> en producción (bloquea el server) — para invalidar por patrón, iterar con <code>SCAN</code>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 2 ================= -->
+  <section class="submodule" id="sub2">
+    <div class="submodule-header">
+      <span class="num">2</span>
+      <div>
+        <h2>Implement event messaging with Azure Managed Redis</h2>
+        <p class="desc">Pub/Sub para difundir eventos, Streams para colas de trabajo confiables — no son intercambiables.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Pub/Sub: difusión, no cola</h3>
+        <p><strong>At-most-once</strong>, sin persistencia: si un subscriber está desconectado, pierde el mensaje para siempre. Cada mensaje llega a <em>todos</em> los subscribers activos del canal — por diseño.</p>
+        <span class="cmd-block">redis_client.publish('ai:models:updated', 'v2')
+pubsub.subscribe('ai:models:updated')</span>
+        <p>Ideal para: invalidar cache en todas las instancias a la vez, notificar cambios de config — no para repartir trabajo.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Streams: cola de tareas confiable</h3>
+        <p>A diferencia de Pub/Sub, los mensajes <strong>persisten</strong> y se puede confirmar su procesamiento. Ideal para encolar requests de inferencia sin bloquear la API.</p>
+        <span class="cmd-block">redis.xadd('ai:inference:queue', {'prompt': p, 'model': m})
+tasks = redis.xreadgroup('workers', worker_id, {'q': '>'}, count=5)
+redis.xack('ai:inference:queue', 'workers', task_id)</span>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Recuperar tareas colgadas</h3>
+        <p>Si un worker crashea a mitad de una tarea, esta queda "pending" (no confirmada). <code>XPENDING</code> la detecta y <code>XCLAIM</code> se la reasigna a otro worker sano — sin escribir lógica de retry a mano.</p>
+        <div class="warning">⚠️ Los streams <strong>no expiran solos</strong> — hay que hacer <code>XTRIM</code> o pasar <code>maxlen</code> en <code>XADD</code>, o la memoria crece indefinidamente.</div>
+      </div>
+
+      <div class="card wide">
+        <h3><span class="dot"></span>¿Cuál uso? Broadcast vs distribución coordinada</h3>
+        <div class="compare">
+          <div class="box"><h4>Pub/Sub → Broadcast</h4><p>3 workers suscritos al mismo canal = <strong>los 3 procesan el mismo mensaje</strong> (triplicás cómputo). Bueno cuando eso es justo lo que querés (invalidar cache en todas las instancias).</p></div>
+          <div class="box"><h4>Streams + Consumer Group → Coordinado</h4><p>3 workers leyendo del mismo grupo = <strong>cada mensaje va a uno solo</strong>. Escalás agregando workers sin cambiar código — Redis reparte solo.</p></div>
+        </div>
+        <p>Muchas arquitecturas usan ambos: Streams para encolar el trabajo real, Pub/Sub para avisar en tiempo real que "algo pasó" (ej. a un WebSocket).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUBMÓDULO 3 ================= -->
+  <section class="submodule" id="sub3">
+    <div class="submodule-header">
+      <span class="num">3</span>
+      <div>
+        <h2>Implement vector storage in Azure Managed Redis</h2>
+        <p class="desc">RediSearch convierte Redis en una base vectorial — útil cuando ya usás Redis como cache y no querés sumar otro sistema.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3><span class="dot"></span>Crear el índice vectorial</h3>
+        <span class="cmd-block">VectorField("embedding", "HNSW", {
+  "TYPE": "FLOAT32", "DIM": 1536,
+  "DISTANCE_METRIC": "COSINE"
+})</span>
+        <p>Al crear el índice con un <code>prefix</code> (ej. <code>doc:</code>), Redis indexa automáticamente cualquier vector que guardes bajo esas keys — sin paso de indexado aparte.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>FLAT vs HNSW</h3>
+        <div class="compare">
+          <div class="box"><h4>FLAT</h4><p>Fuerza bruta, 100% exacto. Bien para &lt;10.000 vectores o desarrollo.</p></div>
+          <div class="box"><h4>HNSW</h4><p>Grafo aproximado, 95-99% recall, consultas &lt;10ms incluso con millones de vectores. Default para producción.</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Métrica de distancia</h3>
+        <table class="mini">
+          <tr><th>Métrica</th><th>Usar para</th></tr>
+          <tr><td>COSINE</td><td>Embeddings de texto (OpenAI, Cohere) — el estándar</td></tr>
+          <tr><td>L2</td><td>Embeddings de imagen / datos espaciales</td></tr>
+          <tr><td>IP</td><td>Solo si tus vectores ya vienen normalizados</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Queries: KNN, híbrida y por rango</h3>
+        <span class="cmd-block">*=>[KNN 5 @embedding $vec AS score]
+@category:{docs}=>[KNN 3 @embedding $vec AS score]   -- híbrida
+@embedding:[VECTOR_RANGE 0.2 $vec]                    -- por umbral</span>
+        <p><code>EF_RUNTIME</code> controla cuánto explora el grafo HNSW en esa query puntual — default 10 (rápido), subir a 100-200 si necesitás más precisión.</p>
+      </div>
+
+      <div class="card">
+        <h3><span class="dot"></span>Hash vs JSON para guardar el vector</h3>
+        <table class="mini">
+          <tr><th></th><th>Hash</th><th>JSON</th></tr>
+          <tr><td>Memoria</td><td>Menor (bytes binarios)</td><td>Mayor (array + overhead)</td></tr>
+          <tr><td>Velocidad</td><td>Más rápida</td><td>Un poco más lenta</td></tr>
+          <tr><td>Estructura</td><td>Solo campos planos</td><td>Objetos anidados, varios vectores por doc</td></tr>
+        </table>
+        <p>Para la mayoría de casos de similarity search con metadata simple, <strong>Hash</strong> es la opción por defecto.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="pill-row" style="justify-content:center; margin-top: -20px; margin-bottom: 20px;">
+      <span class="pill">Cache-aside</span>
+      <span class="pill">TTL</span>
+      <span class="pill">SCAN vs KEYS</span>
+      <span class="pill">Pub/Sub</span>
+      <span class="pill">Redis Streams</span>
+      <span class="pill">Consumer Group</span>
+      <span class="pill">XCLAIM</span>
+      <span class="pill">HNSW</span>
+      <span class="pill">EF_RUNTIME</span>
+      <span class="pill">Hash vs JSON</span>
+    </div>
+  </section>
+
+  <footer>
+    Infografía de repaso — se irá ampliando con un módulo nuevo a medida que avance el curso.<br>
+    Contenido investigado directo de Microsoft Learn (units del módulo), no solo de nuestros labs propios.<br>
+    Curso: <a href="https://learn.microsoft.com/en-us/training/courses/ai-200t00" target="_blank" rel="noopener">AI-200T00 · Develop AI cloud solutions on Azure</a>
+  </footer>
+
+</div>
+</body>
+</html>
